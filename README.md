@@ -14,7 +14,7 @@ Dependency    | [![Maven Central](https://maven-badges.herokuapp.com/maven-centr
 
 	<dependency>
 		<groupId>com.namics.oss.java.tools</groupId>
-		<artifactId>java-tools-pom</artifactId>
+		<artifactId>java-tools</artifactId>
 		<version>1.0.0</version>
 	</dependency>
 
