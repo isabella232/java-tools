@@ -6,6 +6,8 @@ package com.namics.oss.java.tools.utils.excel;
 
 import com.namics.oss.java.tools.utils.bean.TestBean;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -26,6 +28,8 @@ import static org.junit.Assert.assertThat;
  * @since 21.07.15 10:05
  */
 public class ExcelUtilsTest {
+	private static final Logger LOG = LoggerFactory.getLogger(ExcelUtilsTest.class);
+
 	TestBean[] testBeans = new TestBean[] {
 			new TestBean().username("hmuster").firstname("Hans").lastname("Muster").id("1").pleaseIgnore("ignoreProp"),
 			new TestBean().username("emuster").firstname("Erika").lastname("Muster").id("2").pleaseIgnore("ignoreProp"),
@@ -35,7 +39,7 @@ public class ExcelUtilsTest {
 	@Test
 	public void testWriteRead() throws Exception {
 		String absolute = getClass().getResource("/").getFile() + "excel/util-test.xlsx";
-		System.out.println(absolute);
+		LOG.info("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			ExcelUtils.write(Arrays.asList(testBeans), out, "pleaseIgnore");
 		}
@@ -43,7 +47,7 @@ public class ExcelUtilsTest {
 		try (InputStream input = new FileInputStream(absolute)) {
 			List<TestBean> verify = ExcelUtils.read(TestBean.class, input);
 			for (TestBean testBean : verify) {
-				System.out.println(testBean);
+				LOG.info("{}", testBean);
 			}
 			assertThat(verify, contains(sameBeanAs(testBeans[0]).ignoring("pleaseIgnore").with("pleaseIgnore", isEmptyOrNullString()),
 			                            sameBeanAs(testBeans[1]).ignoring("pleaseIgnore").with("pleaseIgnore", isEmptyOrNullString())));
