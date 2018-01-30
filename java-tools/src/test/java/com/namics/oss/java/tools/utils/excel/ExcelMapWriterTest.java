@@ -1,6 +1,8 @@
 package com.namics.oss.java.tools.utils.excel;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  * @since 05.10.2016 10:57
  */
 public class ExcelMapWriterTest {
-
+	private static final Logger LOG = LoggerFactory.getLogger(ExcelMapWriterTest.class);
     private final static String COLUMN_INT_KEY = "columnInt";
     private final static Integer COLUMN_INT_VALUE = 1;
 
@@ -54,7 +56,7 @@ public class ExcelMapWriterTest {
     private void checkIfFileContainsMaps(final String absolute, final List<Map<String, Object>> bulk) throws IOException {
         try (InputStream input = new FileInputStream(absolute)) {
             final List<Map<String, String>> verify = new ExcelMapReader().read(input);
-            verify.forEach(System.out::println);
+            verify.forEach(e -> LOG.info("{}", e));
             assertEquals(verify.size(), bulk.size());
             Map<String, String> verifyEntry = verify.get(0);
             Map<String, Object> bulkEntry = bulk.get(0);
