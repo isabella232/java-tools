@@ -1,0 +1,34 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,SimplePropertyDescriptor,100,0,2,0,25,0,12,0,11,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ExtendedBeanInfo,359,0,54,0,66,0,41,0,14,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.MethodFilter() {...},14,0,4,0,2,0,4,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.MethodFilter() {...},10,0,2,0,2,0,3,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.MethodCallback() {...},69,0,16,0,17,0,10,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,PropertyDescriptorComparator,43,0,6,0,10,0,5,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.MethodCallback() {...},12,0,0,0,3,0,2,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.FieldFilter() {...},15,0,4,0,2,0,4,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils.new ReflectionUtils.FieldCallback() {...},22,0,0,0,5,0,2,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,SimpleIndexedPropertyDescriptor,206,0,16,0,52,0,24,0,16,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ReflectionUtils,751,0,128,0,157,0,97,0,33,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,ExtendedBeanInfo.new Comparator() {...},12,0,0,0,2,0,2,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,BeanUtils,125,0,14,0,30,0,12,0,5,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.reflection,PropertyDescriptorUtils,399,0,72,0,80,0,42,0,6,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils,AsciiFoldingUtil,2014,0,234,0,676,0,233,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils,Assert,112,0,18,0,34,0,22,0,13,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils,PredicateUtils,20,0,2,0,6,0,8,0,7,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils,ArrayUtils,140,0,24,0,41,0,25,0,13,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.web,RequestUtils,47,0,8,0,15,0,6,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelMapReader,286,0,28,0,64,0,23,0,9,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelBeanWriter,348,0,34,0,83,0,28,0,11,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelUtils,115,0,0,0,37,0,14,0,14,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelMapWriter,293,0,26,0,71,0,21,0,8,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelBeanReader,338,0,36,0,73,0,27,0,9,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.excel,ExcelException,23,0,0,0,10,0,5,0,5,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.properties,PropertiesUtils,14,0,0,0,3,0,2,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.properties,PropertiesBuilder,27,0,2,0,8,0,5,0,4,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.maps,MapUtils,14,0,0,0,3,0,2,0,2,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.maps,MapBuilder,83,0,2,0,28,0,8,0,7,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.maps,MapCreator,124,0,2,0,27,0,10,0,9,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.maps,SimpleMap,21,0,0,0,7,0,4,0,4,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.csv,CsvUtils,54,0,0,0,18,0,6,0,6,0
+java-tools-test/java-tools,com.namics.oss.java.tools.utils.csv,CsvWriter,126,0,18,0,26,0,13,0,4,0

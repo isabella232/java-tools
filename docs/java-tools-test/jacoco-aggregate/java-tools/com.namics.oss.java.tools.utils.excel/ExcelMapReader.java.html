@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ExcelMapReader.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">java-tools-test</a> &gt; <a href="../index.html" class="el_bundle">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.excel</a> &gt; <span class="el_source">ExcelMapReader.java</span></div><h1>ExcelMapReader.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2016 Namics AG. All rights reserved.
+ */
+package com.namics.oss.java.tools.utils.excel;
+
+import org.apache.poi.ss.usermodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
+import java.util.*;
+
+/**
+ * ExcelMapReader.
+ *
+ * @author tzehnder, Namics AG
+ * @since 05.10.2016 12:53
+ */
+<span class="nc" id="L21">public class ExcelMapReader {</span>
+<span class="nc" id="L22">    private static final Logger LOG = LoggerFactory.getLogger(ExcelMapReader.class);</span>
+
+    public static final int DEFAULT_HEADER_ROW = 0;
+
+<span class="nc" id="L26">    protected int headerRow = DEFAULT_HEADER_ROW;</span>
+
+    /**
+     * Read the excel file and map rows to maps
+     *
+     * @param input input stream of the excel to read
+     * @return List of maps read form excel
+     * @throws ExcelException runtime exception when excel processing failed
+     */
+    public List&lt;Map&lt;String, String&gt;&gt; read(final InputStream input) {
+<span class="nc" id="L36">        return read(input, null);</span>
+    }
+
+    /**
+     * Read the excel file and map rows to maps
+     *
+     * @param input   input stream of the excel to read
+     * @param mapping map for mapping. key=header value, value=name of property descriptor
+     * @return List of maps read form excel
+     * @throws ExcelException runtime exception when excel processing failed
+     */
+    public List&lt;Map&lt;String, String&gt;&gt; read(final InputStream input, final Map&lt;String, String&gt; mapping) {
+<span class="nc" id="L48">        List&lt;Map&lt;String, String&gt;&gt; maps = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        try (InputStream in = new PushbackInputStream(</span>
+                (input instanceof BufferedInputStream) ? (BufferedInputStream) input : new BufferedInputStream(input))) {
+<span class="nc" id="L52">            Workbook workbook = WorkbookFactory.create(in);</span>
+
+<span class="nc" id="L54">            int sheetCount = workbook.getNumberOfSheets();</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            for (int i = 0; i &lt; sheetCount; i++) {</span>
+<span class="nc" id="L56">                String resourceName = Integer.valueOf(i).toString();</span>
+<span class="nc" id="L57">                LOG.info(&quot;process sheet number [{}]&quot;, resourceName);</span>
+
+                // read sheet information
+<span class="nc" id="L60">                Sheet sheet = workbook.getSheetAt(i);</span>
+<span class="nc" id="L61">                resourceName = workbook.getSheetName(i);</span>
+<span class="nc" id="L62">                LOG.info(&quot;sheet name is [{}]&quot;, resourceName);</span>
+
+                // get headers for properties mapping
+<span class="nc" id="L65">                Map&lt;Integer, String&gt; headerMapping = parseHeaderRow(sheet, mapping);</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                if (headerMapping != null) {</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                    for (Iterator&lt;?&gt; rit = sheet.rowIterator(); rit.hasNext(); ) {</span>
+<span class="nc" id="L69">                        Row row = (Row) rit.next();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                        if (row.getRowNum() &gt; this.headerRow) {</span>
+<span class="nc" id="L71">                            Map&lt;String, String&gt; entry = parseContentBodyRow(headerMapping, row);</span>
+<span class="nc" id="L72">                            maps.add(entry);</span>
+                        }
+<span class="nc" id="L74">                    }</span>
+                } else {
+<span class="nc" id="L76">                    LOG.info(&quot;sheet [{}] has no content.&quot;, resourceName);</span>
+                }
+            }
+<span class="nc" id="L79">        } catch (Exception e) {</span>
+<span class="nc" id="L80">            throw new ExcelException(&quot;Could not read data form stream&quot;, e);</span>
+<span class="nc" id="L81">        }</span>
+
+
+<span class="nc" id="L84">        return maps;</span>
+    }
+
+    protected Map&lt;String, String&gt; parseContentBodyRow(Map&lt;Integer, String&gt; headerMapping, Row row) throws Exception {
+<span class="nc" id="L88">        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        for (Iterator&lt;?&gt; cit = row.cellIterator(); cit.hasNext(); ) {</span>
+<span class="nc" id="L90">            Cell cell = (Cell) cit.next();</span>
+<span class="nc" id="L91">            int index = cell.getColumnIndex();</span>
+<span class="nc" id="L92">            String key = headerMapping.get(index);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (key != null) {</span>
+                try {
+<span class="nc" id="L95">                    String value = getStringValue(cell);</span>
+<span class="nc" id="L96">                    map.put(key, value);</span>
+<span class="nc" id="L97">                } catch (Exception e) {</span>
+<span class="nc" id="L98">                    LOG.warn(&quot;Could not set value for row {} column {} : {}&quot;, row.getRowNum(), index, e, null);</span>
+<span class="nc" id="L99">                }</span>
+            }
+<span class="nc" id="L101">        }</span>
+<span class="nc" id="L102">        LOG.info(&quot;Read map {}&quot;, map);</span>
+<span class="nc" id="L103">        return map;</span>
+
+    }
+
+    private String getStringValue(final Cell cell) {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        switch (cell.getCellType()) {</span>
+            case Cell.CELL_TYPE_NUMERIC:
+<span class="nc" id="L110">                return String.valueOf(cell.getNumericCellValue());</span>
+            default:
+<span class="nc" id="L112">                return cell.getRichStringCellValue().getString();</span>
+        }
+    }
+
+
+    protected Map&lt;Integer, String&gt; parseHeaderRow(Sheet sheet, Map&lt;String, String&gt; mapping) throws Exception {
+<span class="nc" id="L118">        Map&lt;Integer, String&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (sheet == null || sheet.getRow(this.headerRow) == null) {</span>
+<span class="nc" id="L120">            return null;</span>
+        }
+
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (Iterator&lt;?&gt; cit = sheet.getRow(this.headerRow).cellIterator(); cit.hasNext(); ) {</span>
+<span class="nc" id="L124">            Cell cell = (Cell) cit.next();</span>
+<span class="nc" id="L125">            int index = cell.getColumnIndex();</span>
+<span class="nc" id="L126">            String value = cell.getRichStringCellValue().getString();</span>
+            try {
+<span class="nc bnc" id="L128" title="All 4 branches missed.">                if (mapping == null || mapping.isEmpty()) {</span>
+<span class="nc" id="L129">                    result.put(index, value);</span>
+                } else {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                    if (mapping.containsKey(value)) {</span>
+<span class="nc" id="L132">                        result.put(index, mapping.get(value));</span>
+                    }
+                }
+<span class="nc" id="L135">            } catch (Exception e) {</span>
+<span class="nc" id="L136">                LOG.warn(&quot;Could not match property {} in column {}: skip ({})&quot;, value, index, e, null);</span>
+<span class="nc" id="L137">            }</span>
+<span class="nc" id="L138">        }</span>
+<span class="nc" id="L139">        return result;</span>
+    }
+
+    public void setHeaderRow(int headerRow) {
+<span class="nc" id="L143">        this.headerRow = headerRow;</span>
+<span class="nc" id="L144">    }</span>
+
+    public ExcelMapReader headerRow(int headerRow) {
+<span class="nc" id="L147">        setHeaderRow(headerRow);</span>
+<span class="nc" id="L148">        return this;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

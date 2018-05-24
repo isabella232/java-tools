@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegexMatcher.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools-test</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.test</a> &gt; <span class="el_source">RegexMatcher.java</span></div><h1>RegexMatcher.java</h1><pre class="source lang-java linenums">/*
+* Copyright 2000-2015 Namics AG. All rights reserved.
+*/
+
+package com.namics.oss.java.tools.utils.test;
+
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
+
+import java.util.regex.Pattern;
+
+/**
+ * Hamcrest Matcher for String verification with Regex.
+ * ${NAME}.
+ *
+ * @author aschaefer, Namics AG
+ * @since 23.03.2015 09:56
+ */
+public class RegexMatcher extends TypeSafeMatcher&lt;String&gt; {
+
+	private final Pattern pattern;
+
+	public RegexMatcher(final String regex) {
+<span class="nc" id="L24">		this(Pattern.compile(regex));</span>
+<span class="nc" id="L25">	}</span>
+
+<span class="nc" id="L27">	public RegexMatcher(final Pattern pattern) {</span>
+<span class="nc" id="L28">		this.pattern = pattern;</span>
+<span class="nc" id="L29">	}</span>
+
+	@Override
+	public void describeTo(final Description description) {
+<span class="nc" id="L33">		description.appendText(&quot;matches regex=`&quot; + pattern + &quot;`&quot;);</span>
+<span class="nc" id="L34">	}</span>
+
+	@Override
+	public boolean matchesSafely(final String string) {
+<span class="nc" id="L38">		return pattern.matcher(string).matches();</span>
+	}
+
+	/**
+	 * Matcher to match a String against a regex expression.
+	 *
+	 * @param regex regex expression.
+	 * @return Matcher for assertions
+	 */
+	public static RegexMatcher matchesRegex(final String regex) {
+<span class="nc" id="L48">		return new RegexMatcher(regex);</span>
+	}
+
+	/**
+	 * Matcher to match a String against a regex pattern.
+	 *
+	 * @param pattern compiled regex pattern.
+	 * @return Matcher for assertions
+	 */
+	public static RegexMatcher matchesRegex(final Pattern pattern) {
+<span class="nc" id="L58">		return new RegexMatcher(pattern);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

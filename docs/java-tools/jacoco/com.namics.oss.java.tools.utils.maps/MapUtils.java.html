@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.maps</a> &gt; <span class="el_source">MapUtils.java</span></div><h1>MapUtils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2014 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils.maps;
+
+/**
+ * Helper utils for map handling.
+ *
+ * @author aschaefer, Namics AG
+ * @since 13.06.14 10:07
+ */
+public class MapUtils {
+
+	/**
+	 * Util not to be instantiated.
+	 */
+<span class="nc" id="L18">	private MapUtils() {</span>
+<span class="nc" id="L19">		throw new UnsupportedOperationException(&quot;MapUtils cannot be instantiated&quot;);</span>
+	}
+
+	/**
+	 * Start to build a new map with a fresh instance of MapBuilder.
+	 *
+	 * @param key     Key of value to put in a map build with the fresh builder instance
+	 * @param value   Value to be put in a map build with the fresh builder instance
+	 * @param &lt;KEY&gt;   Type of the key
+	 * @param &lt;VALUE&gt; Type of the value
+	 * @return MapBuilder instance to proceed in building the map.
+	 */
+	public static &lt;KEY, VALUE&gt; MapBuilder&lt;KEY, VALUE&gt; put(KEY key, VALUE value) {
+<span class="nc" id="L32">		return new MapBuilder&lt;KEY, VALUE&gt;().put(key, value);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

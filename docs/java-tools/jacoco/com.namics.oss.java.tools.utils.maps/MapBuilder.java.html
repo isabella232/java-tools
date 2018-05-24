@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.maps</a> &gt; <span class="el_source">MapBuilder.java</span></div><h1>MapBuilder.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2014 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils.maps;
+
+import java.util.*;
+
+/**
+ * Helper to bu@ild maps with builder Pattern.
+ *
+ * @param &lt;KEY&gt;   Type of keys to be used in map to be build
+ * @param &lt;VALUE&gt; Type of values to be used in map to be build
+ * @author aschaefer, Namics AG
+ * @since 13.06.14 10:40
+ */
+public class MapBuilder&lt;KEY, VALUE&gt; {
+	protected Map&lt;KEY, VALUE&gt; target;
+
+	/**
+	 * Create a builder with a default map implementation.
+	 */
+<span class="nc" id="L23">	public MapBuilder() {</span>
+<span class="nc" id="L24">		this.target = new HashMap&lt;KEY, VALUE&gt;();</span>
+<span class="nc" id="L25">	}</span>
+
+	/**
+	 * Create a builder to populate an existing Map instances.
+	 * The provided map will be modified!
+	 *
+	 * @param target Map Instance to be populated.
+	 */
+<span class="nc" id="L33">	public MapBuilder(Map&lt;KEY, VALUE&gt; target) {</span>
+<span class="nc" id="L34">		this.target = target;</span>
+<span class="nc" id="L35">	}</span>
+
+	/**
+	 * Create a builder to create a map of the provided type.
+	 *
+	 * @param clazz Type of Map to be created with this builder.
+	 * @param &lt;MAP&gt; Type of map to be build with this builder.
+	 * @throws IllegalArgumentException    if the class or its nullary
+	 *                                     constructor is not accessible.
+	 * @throws IllegalArgumentException    if this {@code Class} represents an abstract class,
+	 *                                     an interface, an array class, a primitive type, or void;
+	 *                                     or if the class has no nullary constructor;
+	 *                                     or if the instantiation fails for some other reason.
+	 * @throws ExceptionInInitializerError if the initialization
+	 *                                     provoked by this method fails.
+	 * @throws SecurityException           If a security manager, &lt;i&gt;s&lt;/i&gt;, is present and any of the
+	 *                                     following conditions is met:
+	 *                                     &lt;ul&gt;
+	 *                                     &lt;li&gt; invocation of
+	 *                                     {@link SecurityManager#checkMemberAccess
+	 *                                     s.checkMemberAccess(this, Member.PUBLIC)} denies
+	 *                                     creation of new instances of this class
+	 *                                     &lt;li&gt; the caller's class loader is not the same as or an
+	 *                                     ancestor of the class loader for the current class and
+	 *                                     invocation of {@link SecurityManager#checkPackageAccess
+	 *                                     s.checkPackageAccess()} denies access to the package
+	 *                                     of this class
+	 *                                     &lt;/ul&gt;
+	 */
+<span class="nc" id="L64">	public &lt;MAP extends Map&lt;KEY, VALUE&gt;&gt; MapBuilder(Class&lt;MAP&gt; clazz) {</span>
+		try {
+<span class="nc" id="L66">			this.target = clazz.newInstance();</span>
+<span class="nc" id="L67">		} catch (IllegalAccessException e) {</span>
+<span class="nc" id="L68">			throw new IllegalArgumentException(e);</span>
+<span class="nc" id="L69">		} catch (InstantiationException e) {</span>
+<span class="nc" id="L70">			throw new IllegalArgumentException(e);</span>
+<span class="nc" id="L71">		}</span>
+<span class="nc" id="L72">	}</span>
+
+	/**
+	 * Put key value pair into map to be build
+	 *
+	 * @param key   key to use for pair
+	 * @param value value for key
+	 * @return this builder for fluent programming
+	 */
+	public MapBuilder&lt;KEY, VALUE&gt; put(KEY key, VALUE value) {
+<span class="nc" id="L82">		this.target.put(key, value);</span>
+<span class="nc" id="L83">		return this;</span>
+	}
+
+	/**
+	 * Get the map build with this builder.
+	 *
+	 * @return current state of map build with this builder.
+	 */
+	public Map&lt;KEY, VALUE&gt; map() {
+<span class="nc" id="L92">		return this.target;</span>
+	}
+
+	/**
+	 * Get an immutable instance of the current map.
+	 *
+	 * @return map that cannot be modified anymore.
+	 */
+	public Map&lt;KEY, VALUE&gt; immutable() {
+
+		Map&lt;KEY, VALUE&gt; current;
+		try {
+<span class="nc" id="L104">			current = this.target.getClass().newInstance();</span>
+<span class="nc" id="L105">		} catch (Throwable e) {</span>
+<span class="nc" id="L106">			current = new HashMap&lt;KEY, VALUE&gt;();</span>
+<span class="nc" id="L107">		}</span>
+<span class="nc" id="L108">		current.putAll(this.target);</span>
+<span class="nc" id="L109">		return Collections.unmodifiableMap(current);</span>
+	}
+
+	public SortedMap&lt;KEY, VALUE&gt; sorted() {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (this.target instanceof SortedMap) {</span>
+<span class="nc" id="L114">			return (SortedMap) this.target;</span>
+		}
+<span class="nc" id="L116">		TreeMap&lt;KEY, VALUE&gt; sorted = new TreeMap&lt;KEY, VALUE&gt;();</span>
+<span class="nc" id="L117">		sorted.putAll(this.target);</span>
+<span class="nc" id="L118">		return sorted;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

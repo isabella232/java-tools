@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SimpleMap.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">java-tools-test</a> &gt; <a href="../index.html" class="el_bundle">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.maps</a> &gt; <span class="el_source">SimpleMap.java</span></div><h1>SimpleMap.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2014 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils.maps;
+
+import java.io.Serializable;
+import java.util.Map;
+import java.util.TreeMap;
+
+/**
+ * SimpleMap.
+ *
+ * @param &lt;KEY&gt;   serializable map key type
+ * @param &lt;VALUE&gt; serializable map value type
+ * @author aschaefer, Namics AG
+ * @since 07.05.14 13:27
+ * @deprecated Use {@link MapBuilder} or {@link MapUtils#put(Object, Object)} instead.
+ */
+@Deprecated
+public final class SimpleMap&lt;KEY extends Serializable, VALUE extends Serializable&gt; extends TreeMap&lt;KEY, VALUE&gt; {
+	private static final long serialVersionUID = 30000L;
+
+	/**
+	 * {@inheritDoc}
+	 */
+<span class="nc" id="L27">	public SimpleMap() {</span>
+<span class="nc" id="L28">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public SimpleMap(Map&lt;? extends KEY, ? extends VALUE&gt; m) {
+<span class="nc" id="L34">		super(m);</span>
+<span class="nc" id="L35">	}</span>
+
+	/**
+	 * put a value for the key and return this map for fluent programming style.
+	 *
+	 * @param key   key to add a value for
+	 * @param value value to add for key
+	 * @return this map instance
+	 */
+	public SimpleMap&lt;KEY, VALUE&gt; add(KEY key, VALUE value) {
+<span class="nc" id="L45">		this.put(key, value);</span>
+<span class="nc" id="L46">		return this;</span>
+	}
+
+	/**
+	 * Create a new map instance and populate with the key value pair.
+	 *
+	 * @param key     key to add to new map
+	 * @param value   value to add to new map
+	 * @param &lt;KEY&gt;   serializable map key type
+	 * @param &lt;VALUE&gt; serializable map value type&gt;
+	 * @return
+	 */
+	public static &lt;KEY extends Serializable, VALUE extends Serializable&gt; SimpleMap&lt;KEY, VALUE&gt; asMap(KEY key, VALUE value) {
+<span class="nc" id="L59">		return new SimpleMap&lt;KEY, VALUE&gt;().add(key, value);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

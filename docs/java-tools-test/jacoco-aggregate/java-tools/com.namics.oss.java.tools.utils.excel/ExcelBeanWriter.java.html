@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ExcelBeanWriter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">java-tools-test</a> &gt; <a href="../index.html" class="el_bundle">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.excel</a> &gt; <span class="el_source">ExcelBeanWriter.java</span></div><h1>ExcelBeanWriter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2015 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils.excel;
+
+import com.namics.oss.java.tools.utils.reflection.BeanUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFRichTextString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.beans.PropertyDescriptor;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
+
+/**
+ * ExcelBeanWriter.
+ *
+ * @author aschaefer, Namics AG
+ * @since 20.07.15 16:00
+ */
+<span class="nc" id="L31">public class ExcelBeanWriter {</span>
+<span class="nc" id="L32">	private static final Logger LOG = LoggerFactory.getLogger(ExcelBeanWriter.class);</span>
+
+	public static final int DEFAULT_HEADER_ROW = 0;
+<span class="nc" id="L35">	protected int headerRow = DEFAULT_HEADER_ROW;</span>
+
+	/**
+	 * Write a list of bean to excel file, support for xlsx only.
+	 *
+	 * @param beans        beans to write to an excel sheet
+	 * @param outputStream output stream to write the excel sheet
+	 * @param ignores      list of properties to be ignored on writing
+	 * @throws ExcelException runtime exception when excel processiing failed
+	 */
+	public void write(List&lt;?&gt; beans, OutputStream outputStream, String... ignores) throws ExcelException {
+<span class="nc" id="L46">		writeInternal(beans, outputStream, null, ignores);</span>
+<span class="nc" id="L47">	}</span>
+
+	protected &lt;T&gt; Map&lt;Integer, Method&gt; writeHeaderRow(Sheet sheet, Class&lt;T&gt; clazz, String... ignores) throws Exception {
+<span class="nc" id="L50">		LOG.debug(&quot;Create header for {}&quot;, clazz);</span>
+
+<span class="nc bnc" id="L52" title="All 2 branches missed.">		List&lt;String&gt; ignored = ignores != null ? asList(ignores) : Collections.emptyList();</span>
+
+<span class="nc" id="L54">		Map&lt;Integer, Method&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L55">		Row row = sheet.createRow(this.headerRow);</span>
+
+<span class="nc" id="L57">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(clazz);</span>
+
+<span class="nc" id="L59">		int index = 0;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		for (PropertyDescriptor descriptor : descriptors) {</span>
+<span class="nc" id="L61">			Method getter = descriptor.getReadMethod();</span>
+<span class="nc bnc" id="L62" title="All 6 branches missed.">			if (getter != null &amp;&amp; !&quot;class&quot;.equals(descriptor.getName()) &amp;&amp; !ignored.contains(descriptor.getName())) {</span>
+<span class="nc" id="L63">				result.put(index, getter);</span>
+<span class="nc" id="L64">				Cell cell = row.createCell(index);</span>
+<span class="nc" id="L65">				cell.setCellValue(new XSSFRichTextString(descriptor.getName()));</span>
+<span class="nc" id="L66">				CellStyle keyStyle = sheet.getWorkbook().createCellStyle();</span>
+<span class="nc" id="L67">				Font f = sheet.getWorkbook().createFont();</span>
+<span class="nc" id="L68">				f.setBold(false);</span>
+<span class="nc" id="L69">				keyStyle.setFont(f);</span>
+<span class="nc" id="L70">				cell.setCellStyle(keyStyle);</span>
+<span class="nc" id="L71">				index++;</span>
+			}
+<span class="nc" id="L73">		}</span>
+
+<span class="nc" id="L75">		return result;</span>
+	}
+
+	/**
+	 * Write a list of bean to excel file, support for xlsx only.
+	 *
+	 * In case the {@code mapping} parameter has a predictable iteration order (e.g. {@link java.util.LinkedHashSet}) the columns are written in the
+	 * same order.
+	 *
+	 * @param beans        beans to write to an excel sheet
+	 * @param outputStream output stream to write the excel sheet
+	 * @param mapping      map for mapping. key=name of property descriptor, value=header value
+	 * @throws ExcelException runtime exception when excel processiing failed
+	 */
+	public void write(List&lt;?&gt; beans, OutputStream outputStream, Map&lt;String, String&gt; mapping) throws ExcelException {
+<span class="nc" id="L90">		writeInternal(beans, outputStream, mapping);</span>
+<span class="nc" id="L91">	}</span>
+
+	private void writeInternal(List&lt;?&gt; beans, OutputStream outputStream, Map&lt;String, String&gt; mapping, String... ignore) throws ExcelException{
+		try {
+<span class="nc bnc" id="L95" title="All 4 branches missed.">			if (beans != null &amp;&amp; beans.size() &gt; 0) {</span>
+<span class="nc" id="L96">				Class&lt;?&gt; clazz = beans.iterator().next().getClass();</span>
+<span class="nc" id="L97">				SXSSFWorkbook workbook = new SXSSFWorkbook();</span>
+<span class="nc" id="L98">				SXSSFSheet sheet = workbook.createSheet(clazz.getSimpleName());</span>
+<span class="nc" id="L99">				sheet.trackAllColumnsForAutoSizing();</span>
+				final Map&lt;Integer, Method&gt; getters;
+<span class="nc bnc" id="L101" title="All 4 branches missed.">				if(mapping == null || mapping.isEmpty()){</span>
+<span class="nc" id="L102">					getters = writeHeaderRow(sheet, clazz, ignore);</span>
+				}else {
+<span class="nc" id="L104">					getters = writeHeaderRow(sheet, clazz, mapping);</span>
+				}
+<span class="nc" id="L106">				writeContent(getters, beans, sheet);</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">				for (Integer index : getters.keySet()) {</span>
+<span class="nc" id="L109">					sheet.autoSizeColumn(index);</span>
+<span class="nc" id="L110">				}</span>
+<span class="nc" id="L111">				workbook.write(outputStream);</span>
+			}
+<span class="nc" id="L113">		} catch (Exception e) {</span>
+<span class="nc" id="L114">			throw new ExcelException(&quot;Could not write data to stream.&quot;, e);</span>
+<span class="nc" id="L115">		}</span>
+<span class="nc" id="L116">	}</span>
+
+	protected &lt;T&gt; Map&lt;Integer, Method&gt; writeHeaderRow(Sheet sheet, Class&lt;T&gt; clazz, Map&lt;String, String&gt; mapping) {
+<span class="nc" id="L119">		LOG.debug(&quot;Create header for {}&quot;, clazz);</span>
+
+<span class="nc" id="L121">		Map&lt;Integer, Method&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L122">		Row row = sheet.createRow(this.headerRow);</span>
+
+<span class="nc" id="L124">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(clazz);</span>
+
+<span class="nc" id="L126">		int index = 0;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		for (Map.Entry&lt;String, String&gt; entry : mapping.entrySet()) {</span>
+<span class="nc" id="L128">			PropertyDescriptor descriptor = descriptors.stream().filter(d -&gt; d.getName().equals(entry.getKey())).findFirst().orElse(null);</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (descriptor != null) {</span>
+<span class="nc" id="L130">				Method getter = descriptor.getReadMethod();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				if (getter != null) {</span>
+<span class="nc" id="L132">					result.put(index, getter);</span>
+<span class="nc" id="L133">					Cell cell = row.createCell(index);</span>
+<span class="nc" id="L134">					cell.setCellValue(new XSSFRichTextString(mapping.get(descriptor.getName())));</span>
+<span class="nc" id="L135">					CellStyle keyStyle = sheet.getWorkbook().createCellStyle();</span>
+<span class="nc" id="L136">					Font f = sheet.getWorkbook().createFont();</span>
+<span class="nc" id="L137">					f.setBold(false);</span>
+<span class="nc" id="L138">					keyStyle.setFont(f);</span>
+<span class="nc" id="L139">					cell.setCellStyle(keyStyle);</span>
+<span class="nc" id="L140">					index++;</span>
+				}
+			}
+<span class="nc" id="L143">		}</span>
+
+<span class="nc" id="L145">		return result;</span>
+	}
+
+	protected int writeContent(Map&lt;Integer, Method&gt; getters, List&lt;?&gt; beans, Sheet sheet) throws Exception {
+<span class="nc" id="L149">		int rowNum = 0;</span>
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		for (Object bean : beans) {</span>
+<span class="nc" id="L152">			rowNum++;</span>
+<span class="nc" id="L153">			Row row = sheet.createRow(rowNum);</span>
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">			for (Map.Entry&lt;Integer, Method&gt; entry : getters.entrySet()) {</span>
+<span class="nc" id="L156">				Cell cell = row.createCell(entry.getKey());</span>
+<span class="nc" id="L157">				Object value = entry.getValue().invoke(bean);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">				if (value instanceof String) {</span>
+<span class="nc" id="L159">					cell.setCellValue((String) value);</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">				} else if (value != null) {</span>
+<span class="nc" id="L161">					cell.setCellValue(value.toString());</span>
+				}
+<span class="nc" id="L163">			}</span>
+<span class="nc" id="L164">		}</span>
+<span class="nc" id="L165">		return rowNum;</span>
+	}
+
+
+	public void setHeaderRow(int headerRow) {
+<span class="nc" id="L170">		this.headerRow = headerRow;</span>
+<span class="nc" id="L171">	}</span>
+
+	public ExcelBeanWriter headerRow(int headerRow) {
+<span class="nc" id="L174">		setHeaderRow(headerRow);</span>
+<span class="nc" id="L175">		return this;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

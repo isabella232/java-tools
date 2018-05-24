@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MapCreator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils.maps</a> &gt; <span class="el_source">MapCreator.java</span></div><h1>MapCreator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2016 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils.maps;
+
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+
+import java.io.Serializable;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toMap;
+
+/**
+ * This is an experimental util that provides quite fancy map initialization.
+ * &lt;p&gt;
+ * &lt;strong&gt;CAUTION:&lt;/strong&gt; performance of this method is not sufficient for high repetitive operations.&lt;/strong&gt;
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Wouldn't it be great if we could create Java maps like this?
+ * &lt;/p&gt;
+ * &lt;pre&gt;
+ * Map&lt;String, Integer&gt; map = mapOf(
+ *      one -&gt; 1,
+ *      two -&gt; 2
+ * );
+ * &lt;/pre&gt;
+ * &lt;p&gt;
+ * Here you are!
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * The following conditions are required for this function to work properly:
+ * &lt;ul&gt;
+ * &lt;li&gt;Java 1.8.0_80+&lt;/li&gt;
+ * &lt;li&gt;Compiled with &lt;code&gt;-parameter&lt;/code&gt; flag&lt;/li&gt;
+ * &lt;/ul&gt;
+ * &lt;/p&gt;
+ * &lt;p&gt;
+ * Credits to Per-Åke Minborg.
+ * &lt;/p&gt;
+ *
+ * @param &lt;VALUE&gt; map entry value type
+ * @see &lt;a href=&quot;http://minborgsjavapot.blogspot.ch/2016/12/creating-maps-with-named-lambdas.html&quot; &gt;Creating Maps With Named Lambdas&lt;/a&gt;
+ */
+@FunctionalInterface
+public interface MapCreator&lt;VALUE&gt; extends Function&lt;String, VALUE&gt;, Serializable {
+
+<span class="nc" id="L53">	String JAVA_VERSION = Runtime.class.getPackage().getImplementationVersion();</span>
+	String MIN_JAVA_VERSION = &quot;1.8.0_80&quot;;
+
+	default String key() {
+<span class="nc" id="L57">		return functionalMethod().getParameters()[0].getName();</span>
+	}
+
+	default VALUE value() {
+<span class="nc" id="L61">		return apply(key());</span>
+	}
+
+	default Method functionalMethod() {
+<span class="nc" id="L65">		final SerializedLambda serialzedLabmda = serializedLambda();</span>
+<span class="nc" id="L66">		final Class&lt;?&gt; implementationClass = implementationClass(serialzedLabmda);</span>
+<span class="nc" id="L67">		return Stream.of(implementationClass.getDeclaredMethods())</span>
+<span class="nc" id="L68">		             .filter(m -&gt; Objects.equals(m.getName(), serialzedLabmda.getImplMethodName()))</span>
+<span class="nc" id="L69">		             .findFirst()</span>
+<span class="nc" id="L70">		             .orElseThrow(RuntimeException::new);</span>
+	}
+
+	default Class&lt;?&gt; implementationClass(SerializedLambda serializedLambda) {
+		try {
+<span class="nc" id="L75">			final String className = serializedLambda.getImplClass().replaceAll(&quot;/&quot;, &quot;.&quot;);</span>
+<span class="nc" id="L76">			return Class.forName(className);</span>
+<span class="nc" id="L77">		} catch (Exception e) {</span>
+<span class="nc" id="L78">			throw new RuntimeException(e);</span>
+		}
+	}
+
+	default SerializedLambda serializedLambda() {
+		try {
+<span class="nc" id="L84">			final Method replaceMethod = getClass().getDeclaredMethod(&quot;writeReplace&quot;);</span>
+<span class="nc" id="L85">			replaceMethod.setAccessible(true);</span>
+<span class="nc" id="L86">			return (SerializedLambda) replaceMethod.invoke(this);</span>
+<span class="nc" id="L87">		} catch (Exception e) {</span>
+<span class="nc" id="L88">			throw new RuntimeException(e);</span>
+		}
+	}
+
+	/**
+	 * &lt;strong&gt;CAUTION:&lt;/strong&gt; performance of this method is not sufficient for high repetitive operations.&lt;/strong&gt;
+	 * &lt;p&gt;
+	 * Wouldn't it be great if we could create Java maps like this?
+	 * &lt;/p&gt;
+	 * &lt;pre&gt;
+	 * Map&lt;String, Integer&gt; map = mapOf(
+	 *      one -&gt; 1,
+	 *      two -&gt; 2
+	 * );
+	 * &lt;/pre&gt;
+	 * &lt;p&gt;
+	 * Here you are!
+	 * &lt;/p&gt;
+	 * &lt;p&gt;
+	 * The following conditions are required for this function to work properly:
+	 * &lt;ul&gt;
+	 * &lt;li&gt;Java 1.8.0_80+&lt;/li&gt;
+	 * &lt;li&gt;Compiled with &lt;code&gt;-parameter&lt;/code&gt; flag&lt;/li&gt;
+	 * &lt;/ul&gt;
+	 * &lt;/p&gt;
+	 *
+	 * @param mappings lambda expressions that express map creation.
+	 * @param &lt;VALUE&gt;  value type of map entry
+	 * @return initialized map.
+	 */
+	@SafeVarargs
+	static &lt;VALUE&gt; Map&lt;String, VALUE&gt; mapOf(MapCreator&lt;VALUE&gt;... mappings) {
+		try {
+<span class="nc" id="L121">			return Stream.of(mappings).collect(toMap(MapCreator::key, MapCreator::value));</span>
+<span class="nc" id="L122">		} catch (RuntimeException e) {</span>
+<span class="nc" id="L123">			checkVersion(e);</span>
+<span class="nc" id="L124">			throw e;</span>
+		}
+	}
+
+	static void checkVersion(RuntimeException e) throws UnsupportedOperationException {
+<span class="nc" id="L129">		DefaultArtifactVersion minVersion = new DefaultArtifactVersion(MIN_JAVA_VERSION);</span>
+<span class="nc" id="L130">		DefaultArtifactVersion version = new DefaultArtifactVersion(JAVA_VERSION);</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (version.compareTo(minVersion) &lt; 0) {</span>
+<span class="nc" id="L133">			throw new UnsupportedOperationException(&quot;Java Version &quot; + JAVA_VERSION + &quot; is not compatible use at least &quot; + MIN_JAVA_VERSION, e);</span>
+		}
+<span class="nc" id="L135">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

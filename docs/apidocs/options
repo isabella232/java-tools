@@ -1,0 +1,24 @@
+-classpath
+'/home/travis/build/namics/java-tools/java-tools/target/classes:/home/travis/build/namics/java-tools/java-tools-test/target/classes:/home/travis/.m2/repository/org/apache/poi/poi/3.15/poi-3.15.jar:/home/travis/.m2/repository/org/apache/poi/poi-ooxml/3.15/poi-ooxml-3.15.jar:/home/travis/.m2/repository/org/apache/commons/commons-lang3/3.4/commons-lang3-3.4.jar:/home/travis/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/travis/.m2/repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar:/home/travis/.m2/repository/com/github/virtuald/curvesapi/1.04/curvesapi-1.04.jar:/home/travis/.m2/repository/org/hamcrest/hamcrest-library/1.3/hamcrest-library-1.3.jar:/home/travis/.m2/repository/org/apache/poi/poi-ooxml-schemas/3.15/poi-ooxml-schemas-3.15.jar:/home/travis/.m2/repository/stax/stax-api/1.0.1/stax-api-1.0.1.jar:/home/travis/.m2/repository/org/codehaus/plexus/plexus-utils/3.0.22/plexus-utils-3.0.22.jar:/home/travis/.m2/repository/net/sf/supercsv/super-csv/2.4.0/super-csv-2.4.0.jar:/home/travis/.m2/repository/org/apache/maven/maven-artifact/3.3.9/maven-artifact-3.3.9.jar:/home/travis/.m2/repository/org/apache/xmlbeans/xmlbeans/2.6.0/xmlbeans-2.6.0.jar:/home/travis/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar:/home/travis/.m2/repository/org/apache/commons/commons-collections4/4.1/commons-collections4-4.1.jar:/home/travis/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/travis/build/namics/java-tools/java-tools/src/main/java:/home/travis/build/namics/java-tools/java-tools/target/generated-sources/annotations:/home/travis/build/namics/java-tools/java-tools-test/src/main/java:/home/travis/build/namics/java-tools/java-tools-test/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2018 <a href="http://www.namics.com">Namics AG</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/travis/build/namics/java-tools/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'java-tools-pom 1.2.0 API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/home/travis/build/namics/java-tools/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'java-tools-pom 1.2.0 API'

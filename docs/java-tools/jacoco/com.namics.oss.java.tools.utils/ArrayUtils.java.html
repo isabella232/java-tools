@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ArrayUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils</a> &gt; <span class="el_source">ArrayUtils.java</span></div><h1>ArrayUtils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright 2000-2016 Namics AG. All rights reserved.
+ */
+
+package com.namics.oss.java.tools.utils;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+/**
+ * ArrayUtils wrapper methods for common use case of null save 1:1 copy of arrays.
+ * Overloading of several #copyOf is required for performance reasons.
+ *
+ * @author aschaefer, Namics AG
+ * @see Arrays
+ * @since 05.02.16 08:01, 2.0
+ */
+<span class="nc" id="L19">public class ArrayUtils {</span>
+
+	/**
+	 * easy array init with vararg, reduces need for new Type[]{} initialization.
+	 *
+	 * @param input vararg
+	 * @param &lt;T&gt;   type of array items
+	 * @return array from vararg
+	 */
+	@SafeVarargs
+	public static &lt;T&gt; T[] array(T... input) {
+<span class="nc" id="L30">		return input;</span>
+	}
+
+	/**
+	 * Returns a sequential {@link Stream} with the specified array as its
+	 * source.
+	 *
+	 * @param &lt;T&gt;   The type of the array elements
+	 * @param array The array, assumed to be unmodified during use
+	 * @return a {@code Stream} for the array
+	 * @since 2.0
+	 */
+	@SafeVarargs
+	public static &lt;T&gt; Stream&lt;T&gt; stream(T... array) {
+<span class="nc" id="L44">		return Arrays.stream(array);</span>
+	}
+
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param &lt;T&gt;      the class of the objects in the array
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	public static &lt;T&gt; T[] copyOf(T[] original) {
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L63">			return null;</span>
+		}
+<span class="nc" id="L65">		return (T[]) Arrays.copyOf(original, original.length);</span>
+	}
+
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static byte[] copyOf(byte[] original) {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L82">			return null;</span>
+		}
+<span class="nc" id="L84">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static short[] copyOf(short[] original) {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L100">			return null;</span>
+		}
+<span class="nc" id="L102">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static int[] copyOf(int[] original) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L118">			return null;</span>
+		}
+<span class="nc" id="L120">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static long[] copyOf(long[] original) {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L136">			return null;</span>
+		}
+<span class="nc" id="L138">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static char[] copyOf(char[] original) {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L154">			return null;</span>
+		}
+<span class="nc" id="L156">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static float[] copyOf(float[] original) {
+<span class="nc bnc" id="L171" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L172">			return null;</span>
+		}
+<span class="nc" id="L174">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static double[] copyOf(double[] original) {
+<span class="nc bnc" id="L189" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L190">			return null;</span>
+		}
+<span class="nc" id="L192">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Copies the specified array as is.
+	 * so the copy has the specified length.  For all indices that are
+	 * valid in both the original array and the copy, the two arrays will
+	 * contain identical values.
+	 * The resulting array is of exactly the same class as the original array.
+	 *
+	 * @param original the array to be copied, may be null
+	 * @return a copy of the original array, null for null original
+	 * @since 2.0
+	 */
+	public static boolean[] copyOf(boolean[] original) {
+<span class="nc bnc" id="L207" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="nc" id="L208">			return null;</span>
+		}
+<span class="nc" id="L210">		return Arrays.copyOf(original, original.length);</span>
+	}
+
+	/**
+	 * Utility to join an existing array with further items to a combined array.
+	 *
+	 * @param base base array to join with
+	 * @param join items to join to the array
+	 * @param &lt;T&gt;  type of items
+	 * @return joined array, new instance guaranteed
+	 */
+	public static &lt;T&gt; T[] join(T[] base, T... join) {
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		if (base == null) {</span>
+<span class="nc" id="L223">			return copyOf(join);</span>
+		}
+<span class="nc bnc" id="L225" title="All 2 branches missed.">		if (join == null) {</span>
+<span class="nc" id="L226">			return copyOf(base);</span>
+		}
+<span class="nc" id="L228">		int newLength = base.length + join.length;</span>
+<span class="nc" id="L229">		Class&lt;?&gt; newType =  base.getClass();</span>
+
+		@SuppressWarnings(&quot;unchecked&quot;)
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		T[] result = ((Object)newType == (Object)Object[].class)</span>
+				? (T[]) new Object[newLength]
+<span class="nc" id="L234">				: (T[]) Array.newInstance(newType.getComponentType(), newLength);</span>
+<span class="nc" id="L235">		System.arraycopy(base, 0, result, 0, base.length);</span>
+<span class="nc" id="L236">		System.arraycopy(join, 0, result, base.length, join.length);</span>
+<span class="nc" id="L237">		return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>
