@@ -17,7 +17,7 @@ Dependency    | [![Maven Central](https://maven-badges.herokuapp.com/maven-centr
 	<dependency>
 		<groupId>com.namics.oss.java.tools</groupId>
 		<artifactId>java-tools</artifactId>
-		<version>1.1.0</version>
+		<version>1.2.0</version>
 	</dependency>
 
 #### Test Utils
@@ -26,7 +26,7 @@ Dependency    | [![Maven Central](https://maven-badges.herokuapp.com/maven-centr
 	<dependency>
 		<groupId>com.namics.oss.java.tools</groupId>
 		<artifactId>java-tools-test</artifactId>
-		<version>1.1.0</version>
+		<version>1.2.0</version>
 		<scope>test</scope>
 	</dependency>
 
