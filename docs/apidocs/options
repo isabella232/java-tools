@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'java-tools-pom 1.2.0 API'
+'java-tools-pom 1.2.1 API'
 -linkoffline
 'https://docs.oracle.com/javase/8/docs/api' '/home/travis/build/namics/java-tools/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'java-tools-pom 1.2.0 API'
+'java-tools-pom 1.2.1 API'
