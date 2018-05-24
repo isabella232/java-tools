@@ -6,6 +6,8 @@ package com.namics.oss.java.tools.utils.excel;
 
 import com.namics.commons.random.RandomData;
 import com.namics.oss.java.tools.utils.bean.TestBean;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,12 +17,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -82,6 +84,30 @@ public class ExcelBeanWriterTest {
 		}
 
 		checkIfFileContainsBeans(absolute, testBeansMapped);
+	}
+
+	@Test
+	public void testWriteHeaderRow() throws NoSuchMethodException {
+		// Given
+		Class<TestBean> clazz = TestBean.class;
+
+		SXSSFWorkbook workbook = new SXSSFWorkbook();
+		SXSSFSheet sheet = workbook.createSheet(clazz.getSimpleName());
+
+		Map<String, String> mapping = new LinkedHashMap<>();
+		mapping.put("username", "User Name");
+		mapping.put("firstname", "First Name");
+		mapping.put("lastname", "Last Name");
+		mapping.put("id", "ID");
+
+		// When
+		Map<Integer, Method> getters = new ExcelBeanWriter().writeHeaderRow(sheet, clazz, mapping);
+
+		// Then
+		assertThat(getters, hasEntry(equalTo(0), equalTo(clazz.getMethod("getUsername"))));
+		assertThat(getters, hasEntry(equalTo(1), equalTo(clazz.getMethod("getFirstname"))));
+		assertThat(getters, hasEntry(equalTo(2), equalTo(clazz.getMethod("getLastname"))));
+		assertThat(getters, hasEntry(equalTo(3), equalTo(clazz.getMethod("getId"))));
 	}
 
 	private void checkIfFileContainsBeans(final String absolute, final TestBean[] bulk) throws IOException {

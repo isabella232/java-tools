@@ -78,6 +78,9 @@ public class ExcelBeanWriter {
 	/**
 	 * Write a list of bean to excel file, support for xlsx only.
 	 *
+	 * In case the {@code mapping} parameter has a predictable iteration order (e.g. {@link java.util.LinkedHashSet}) the columns are written in the
+	 * same order.
+	 *
 	 * @param beans        beans to write to an excel sheet
 	 * @param outputStream output stream to write the excel sheet
 	 * @param mapping      map for mapping. key=name of property descriptor, value=header value
@@ -112,7 +115,7 @@ public class ExcelBeanWriter {
 		}
 	}
 
-	protected <T> Map<Integer, Method> writeHeaderRow(Sheet sheet, Class<T> clazz, Map<String, String> mapping) throws Exception {
+	protected <T> Map<Integer, Method> writeHeaderRow(Sheet sheet, Class<T> clazz, Map<String, String> mapping) {
 		LOG.debug("Create header for {}", clazz);
 
 		Map<Integer, Method> result = new HashMap<>();
@@ -121,18 +124,21 @@ public class ExcelBeanWriter {
 		List<PropertyDescriptor> descriptors = BeanUtils.getPropertyDescriptors(clazz);
 
 		int index = 0;
-		for (PropertyDescriptor descriptor : descriptors) {
-			Method getter = descriptor.getReadMethod();
-			if (getter != null && !"class".equals(descriptor.getName()) && mapping.containsKey(descriptor.getName())) {
-				result.put(index, getter);
-				Cell cell = row.createCell(index);
-				cell.setCellValue(new XSSFRichTextString(mapping.get(descriptor.getName())));
-				CellStyle keyStyle = sheet.getWorkbook().createCellStyle();
-				Font f = sheet.getWorkbook().createFont();
-				f.setBold(false);
-				keyStyle.setFont(f);
-				cell.setCellStyle(keyStyle);
-				index++;
+		for (Map.Entry<String, String> entry : mapping.entrySet()) {
+			PropertyDescriptor descriptor = descriptors.stream().filter(d -> d.getName().equals(entry.getKey())).findFirst().orElse(null);
+			if (descriptor != null) {
+				Method getter = descriptor.getReadMethod();
+				if (getter != null) {
+					result.put(index, getter);
+					Cell cell = row.createCell(index);
+					cell.setCellValue(new XSSFRichTextString(mapping.get(descriptor.getName())));
+					CellStyle keyStyle = sheet.getWorkbook().createCellStyle();
+					Font f = sheet.getWorkbook().createFont();
+					f.setBold(false);
+					keyStyle.setFont(f);
+					cell.setCellStyle(keyStyle);
+					index++;
+				}
 			}
 		}
 
