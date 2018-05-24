@@ -11,6 +11,10 @@
 	<artifactId>java-tools-test</artifactId>
 	<packaging>jar</packaging>
 
+	<properties>
+		<main.basedir>${project.basedir}/..</main.basedir>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>com.namics.oss.java.tools</groupId>
