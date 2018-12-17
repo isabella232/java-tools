@@ -106,7 +106,7 @@ public class ExcelMapReader {
 
     private String getStringValue(final Cell cell) {
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 return String.valueOf(cell.getNumericCellValue());
             default:
                 return cell.getRichStringCellValue().getString();
