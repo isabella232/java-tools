@@ -7,7 +7,11 @@ package com.namics.oss.java.tools.utils.excel;
 
 import com.namics.oss.java.tools.utils.reflection.BeanUtils;
 import com.namics.oss.java.tools.utils.reflection.ReflectionUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +20,11 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Reader to read Beans form excel.
@@ -36,9 +44,9 @@ public class ExcelBeanReader {
 	/**
 	 * Read the excel file and map rows to beans of type T
 	 *
-	 * @param <T>   Type od beans returned (determined by clazz)
-	 * @param clazz class of the Beans to return (T)
-	 * @param input input stream of the excel to read
+	 * @param <T>     Type od beans returned (determined by clazz)
+	 * @param clazz   class of the Beans to return (T)
+	 * @param input   input stream of the excel to read
 	 * @param mapping map for mapping. key=header value, value=name of property descriptor
 	 * @return List of beans read form excel
 	 * @throws ExcelException runtime exception when excel processing failed
@@ -91,7 +99,7 @@ public class ExcelBeanReader {
 	 * @throws ExcelException runtime exception when excel processing failed
 	 */
 	public <T> List<T> read(Class<T> clazz, InputStream input) throws ExcelException {
-		return read(clazz,input, null);
+		return read(clazz, input, null);
 	}
 
 	protected <T> T parseContentBodyRow(Map<Integer, Method> indexedProperties, Row row, Class<T> clazz) throws Exception {
@@ -117,10 +125,10 @@ public class ExcelBeanReader {
 
 	private String getStringValue(final Cell cell) {
 		switch (cell.getCellType()) {
-			case Cell.CELL_TYPE_NUMERIC:
-				return String.valueOf(cell.getNumericCellValue());
-			default:
-				return cell.getRichStringCellValue().getString();
+		case NUMERIC:
+			return String.valueOf(cell.getNumericCellValue());
+		default:
+			return cell.getRichStringCellValue().getString();
 		}
 	}
 
@@ -152,12 +160,12 @@ public class ExcelBeanReader {
 			int index = cell.getColumnIndex();
 			String value = cell.getRichStringCellValue().getString();
 			try {
-				if (mapping == null || mapping.isEmpty()){
+				if (mapping == null || mapping.isEmpty()) {
 					if (setters.containsKey(value)) {
 						result.put(index, setters.get(value));
 					}
-				}else {
-					if(mapping.containsKey(value) && setters.containsKey(mapping.get(value))){
+				} else {
+					if (mapping.containsKey(value) && setters.containsKey(mapping.get(value))) {
 						result.put(index, setters.get(mapping.get(value)));
 					}
 				}
