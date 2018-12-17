@@ -7,7 +7,11 @@ package com.namics.oss.java.tools.utils.excel;
 
 import com.namics.oss.java.tools.utils.reflection.BeanUtils;
 import com.namics.oss.java.tools.utils.reflection.ReflectionUtils;
-import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +20,11 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Reader to read Beans form excel.
@@ -27,58 +35,58 @@ import java.util.*;
  * @author aschaefer, Namics AG
  * @since 08.09.14 16:17
  */
-<span class="nc" id="L30">public class ExcelBeanReader {</span>
-<span class="nc" id="L31">	private static final Logger LOG = LoggerFactory.getLogger(ExcelBeanReader.class);</span>
+<span class="nc" id="L38">public class ExcelBeanReader {</span>
+<span class="nc" id="L39">	private static final Logger LOG = LoggerFactory.getLogger(ExcelBeanReader.class);</span>
 	public static final int DEFAULT_HEADER_ROW = 0;
 
-<span class="nc" id="L34">	protected int headerRow = DEFAULT_HEADER_ROW;</span>
+<span class="nc" id="L42">	protected int headerRow = DEFAULT_HEADER_ROW;</span>
 
 	/**
 	 * Read the excel file and map rows to beans of type T
 	 *
-	 * @param &lt;T&gt;   Type od beans returned (determined by clazz)
-	 * @param clazz class of the Beans to return (T)
-	 * @param input input stream of the excel to read
+	 * @param &lt;T&gt;     Type od beans returned (determined by clazz)
+	 * @param clazz   class of the Beans to return (T)
+	 * @param input   input stream of the excel to read
 	 * @param mapping map for mapping. key=header value, value=name of property descriptor
 	 * @return List of beans read form excel
 	 * @throws ExcelException runtime exception when excel processing failed
 	 */
 	public &lt;T&gt; List&lt;T&gt; read(Class&lt;T&gt; clazz, InputStream input, Map&lt;String, String&gt; mapping) throws ExcelException {
-<span class="nc" id="L47">		List&lt;T&gt; entries = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L55">		List&lt;T&gt; entries = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L49" title="All 2 branches missed.">		try (InputStream in = new PushbackInputStream(</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		try (InputStream in = new PushbackInputStream(</span>
 				(input instanceof BufferedInputStream) ? (BufferedInputStream) input : new BufferedInputStream(input))) {
-<span class="nc" id="L51">			Workbook workbook = WorkbookFactory.create(in);</span>
+<span class="nc" id="L59">			Workbook workbook = WorkbookFactory.create(in);</span>
 
-<span class="nc" id="L53">			int sheetCount = workbook.getNumberOfSheets();</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">			for (int i = 0; i &lt; sheetCount; i++) {</span>
-<span class="nc" id="L55">				String resourceName = Integer.valueOf(i).toString();</span>
-<span class="nc" id="L56">				LOG.info(&quot;process sheet number [{}]&quot;, resourceName);</span>
+<span class="nc" id="L61">			int sheetCount = workbook.getNumberOfSheets();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">			for (int i = 0; i &lt; sheetCount; i++) {</span>
+<span class="nc" id="L63">				String resourceName = Integer.valueOf(i).toString();</span>
+<span class="nc" id="L64">				LOG.info(&quot;process sheet number [{}]&quot;, resourceName);</span>
 
 				// read sheet information
-<span class="nc" id="L59">				Sheet sheet = workbook.getSheetAt(i);</span>
-<span class="nc" id="L60">				resourceName = workbook.getSheetName(i);</span>
-<span class="nc" id="L61">				LOG.info(&quot;sheet name is [{}]&quot;, resourceName);</span>
+<span class="nc" id="L67">				Sheet sheet = workbook.getSheetAt(i);</span>
+<span class="nc" id="L68">				resourceName = workbook.getSheetName(i);</span>
+<span class="nc" id="L69">				LOG.info(&quot;sheet name is [{}]&quot;, resourceName);</span>
 
 				// get headers for properties mapping
-<span class="nc" id="L64">				Map&lt;Integer, Method&gt; indexedProperties = parseHeaderRow(sheet, clazz, mapping);</span>
+<span class="nc" id="L72">				Map&lt;Integer, Method&gt; indexedProperties = parseHeaderRow(sheet, clazz, mapping);</span>
 
-<span class="nc bnc" id="L66" title="All 2 branches missed.">				if (indexedProperties != null) {</span>
-<span class="nc bnc" id="L67" title="All 2 branches missed.">					for (Iterator&lt;?&gt; rit = sheet.rowIterator(); rit.hasNext(); ) {</span>
-<span class="nc" id="L68">						Row row = (Row) rit.next();</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">						if (row.getRowNum() &gt; this.headerRow) {</span>
-<span class="nc" id="L70">							T entry = parseContentBodyRow(indexedProperties, row, clazz);</span>
-<span class="nc" id="L71">							entries.add(entry);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">				if (indexedProperties != null) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">					for (Iterator&lt;?&gt; rit = sheet.rowIterator(); rit.hasNext(); ) {</span>
+<span class="nc" id="L76">						Row row = (Row) rit.next();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">						if (row.getRowNum() &gt; this.headerRow) {</span>
+<span class="nc" id="L78">							T entry = parseContentBodyRow(indexedProperties, row, clazz);</span>
+<span class="nc" id="L79">							entries.add(entry);</span>
 						}
-<span class="nc" id="L73">					}</span>
+<span class="nc" id="L81">					}</span>
 				} else {
-<span class="nc" id="L75">					LOG.info(&quot;sheet [{}] has no content.&quot;, resourceName);</span>
+<span class="nc" id="L83">					LOG.info(&quot;sheet [{}] has no content.&quot;, resourceName);</span>
 				}
 			}
-<span class="nc" id="L78">		} catch (Exception e) {</span>
-<span class="nc" id="L79">			throw new ExcelException(&quot;Could not read data form stream&quot;, e);</span>
-<span class="nc" id="L80">		}</span>
-<span class="nc" id="L81">		return entries;</span>
+<span class="nc" id="L86">		} catch (Exception e) {</span>
+<span class="nc" id="L87">			throw new ExcelException(&quot;Could not read data form stream&quot;, e);</span>
+<span class="nc" id="L88">		}</span>
+<span class="nc" id="L89">		return entries;</span>
 	}
 
 	/**
@@ -91,36 +99,36 @@ import java.util.*;
 	 * @throws ExcelException runtime exception when excel processing failed
 	 */
 	public &lt;T&gt; List&lt;T&gt; read(Class&lt;T&gt; clazz, InputStream input) throws ExcelException {
-<span class="nc" id="L94">		return read(clazz,input, null);</span>
+<span class="nc" id="L102">		return read(clazz, input, null);</span>
 	}
 
 	protected &lt;T&gt; T parseContentBodyRow(Map&lt;Integer, Method&gt; indexedProperties, Row row, Class&lt;T&gt; clazz) throws Exception {
 
-<span class="nc" id="L99">		T bean = clazz.newInstance();</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">		for (Iterator&lt;?&gt; cit = row.cellIterator(); cit.hasNext(); ) {</span>
-<span class="nc" id="L101">			Cell cell = (Cell) cit.next();</span>
-<span class="nc" id="L102">			int index = cell.getColumnIndex();</span>
-<span class="nc" id="L103">			Method setter = indexedProperties.get(index);</span>
-<span class="nc bnc" id="L104" title="All 2 branches missed.">			if (setter != null) {</span>
+<span class="nc" id="L107">		T bean = clazz.newInstance();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		for (Iterator&lt;?&gt; cit = row.cellIterator(); cit.hasNext(); ) {</span>
+<span class="nc" id="L109">			Cell cell = (Cell) cit.next();</span>
+<span class="nc" id="L110">			int index = cell.getColumnIndex();</span>
+<span class="nc" id="L111">			Method setter = indexedProperties.get(index);</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">			if (setter != null) {</span>
 				try {
-<span class="nc" id="L106">					String value = getStringValue(cell);</span>
-<span class="nc" id="L107">					setter.invoke(bean, value);</span>
-<span class="nc" id="L108">				} catch (Exception e) {</span>
-<span class="nc" id="L109">					LOG.warn(&quot;Could not set value for row {} column {} : {}&quot;, row.getRowNum(), index, e, null);</span>
-<span class="nc" id="L110">				}</span>
+<span class="nc" id="L114">					String value = getStringValue(cell);</span>
+<span class="nc" id="L115">					setter.invoke(bean, value);</span>
+<span class="nc" id="L116">				} catch (Exception e) {</span>
+<span class="nc" id="L117">					LOG.warn(&quot;Could not set value for row {} column {} : {}&quot;, row.getRowNum(), index, e, null);</span>
+<span class="nc" id="L118">				}</span>
 			}
-<span class="nc" id="L112">		}</span>
-<span class="nc" id="L113">		LOG.info(&quot;Read bean {}&quot;, bean);</span>
-<span class="nc" id="L114">		return bean;</span>
+<span class="nc" id="L120">		}</span>
+<span class="nc" id="L121">		LOG.info(&quot;Read bean {}&quot;, bean);</span>
+<span class="nc" id="L122">		return bean;</span>
 
 	}
 
 	private String getStringValue(final Cell cell) {
-<span class="nc bnc" id="L119" title="All 2 branches missed.">		switch (cell.getCellType()) {</span>
-			case Cell.CELL_TYPE_NUMERIC:
-<span class="nc" id="L121">				return String.valueOf(cell.getNumericCellValue());</span>
-			default:
-<span class="nc" id="L123">				return cell.getRichStringCellValue().getString();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		switch (cell.getCellType()) {</span>
+		case NUMERIC:
+<span class="nc" id="L129">			return String.valueOf(cell.getNumericCellValue());</span>
+		default:
+<span class="nc" id="L131">			return cell.getRichStringCellValue().getString();</span>
 		}
 	}
 
@@ -132,50 +140,50 @@ import java.util.*;
 	 * @return a Map with column number to bean properties field mapping.
 	 */
 	protected &lt;T&gt; Map&lt;Integer, Method&gt; parseHeaderRow(Sheet sheet, Class&lt;T&gt; clazz, Map&lt;String, String&gt; mapping) throws Exception {
-<span class="nc" id="L135">		Map&lt;Integer, Method&gt; result = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L136" title="All 4 branches missed.">		if (sheet == null || sheet.getRow(this.headerRow) == null) {</span>
-<span class="nc" id="L137">			return null;</span>
+<span class="nc" id="L143">		Map&lt;Integer, Method&gt; result = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L144" title="All 4 branches missed.">		if (sheet == null || sheet.getRow(this.headerRow) == null) {</span>
+<span class="nc" id="L145">			return null;</span>
 		}
 
-<span class="nc" id="L140">		Map&lt;String, Method&gt; setters = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L141">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(clazz);</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">		for (PropertyDescriptor descriptor : descriptors) {</span>
-<span class="nc" id="L143">			Method method = descriptor.getWriteMethod();</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">			if (method != null) {</span>
-<span class="nc" id="L145">				ReflectionUtils.makeAccessible(method);</span>
-<span class="nc" id="L146">				setters.put(descriptor.getName(), method);</span>
+<span class="nc" id="L148">		Map&lt;String, Method&gt; setters = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L149">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(clazz);</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		for (PropertyDescriptor descriptor : descriptors) {</span>
+<span class="nc" id="L151">			Method method = descriptor.getWriteMethod();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">			if (method != null) {</span>
+<span class="nc" id="L153">				ReflectionUtils.makeAccessible(method);</span>
+<span class="nc" id="L154">				setters.put(descriptor.getName(), method);</span>
 			}
-<span class="nc" id="L148">		}</span>
+<span class="nc" id="L156">		}</span>
 
-<span class="nc bnc" id="L150" title="All 2 branches missed.">		for (Iterator&lt;?&gt; cit = sheet.getRow(this.headerRow).cellIterator(); cit.hasNext(); ) {</span>
-<span class="nc" id="L151">			Cell cell = (Cell) cit.next();</span>
-<span class="nc" id="L152">			int index = cell.getColumnIndex();</span>
-<span class="nc" id="L153">			String value = cell.getRichStringCellValue().getString();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">		for (Iterator&lt;?&gt; cit = sheet.getRow(this.headerRow).cellIterator(); cit.hasNext(); ) {</span>
+<span class="nc" id="L159">			Cell cell = (Cell) cit.next();</span>
+<span class="nc" id="L160">			int index = cell.getColumnIndex();</span>
+<span class="nc" id="L161">			String value = cell.getRichStringCellValue().getString();</span>
 			try {
-<span class="nc bnc" id="L155" title="All 4 branches missed.">				if (mapping == null || mapping.isEmpty()){</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">					if (setters.containsKey(value)) {</span>
-<span class="nc" id="L157">						result.put(index, setters.get(value));</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">				if (mapping == null || mapping.isEmpty()) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">					if (setters.containsKey(value)) {</span>
+<span class="nc" id="L165">						result.put(index, setters.get(value));</span>
 					}
-				}else {
-<span class="nc bnc" id="L160" title="All 4 branches missed.">					if(mapping.containsKey(value) &amp;&amp; setters.containsKey(mapping.get(value))){</span>
-<span class="nc" id="L161">						result.put(index, setters.get(mapping.get(value)));</span>
+				} else {
+<span class="nc bnc" id="L168" title="All 4 branches missed.">					if (mapping.containsKey(value) &amp;&amp; setters.containsKey(mapping.get(value))) {</span>
+<span class="nc" id="L169">						result.put(index, setters.get(mapping.get(value)));</span>
 					}
 				}
-<span class="nc" id="L164">			} catch (Exception e) {</span>
-<span class="nc" id="L165">				LOG.warn(&quot;Could not match property {} in column {}: skip ({})&quot;, value, index, e, null);</span>
-<span class="nc" id="L166">			}</span>
-<span class="nc" id="L167">		}</span>
-<span class="nc" id="L168">		return result;</span>
+<span class="nc" id="L172">			} catch (Exception e) {</span>
+<span class="nc" id="L173">				LOG.warn(&quot;Could not match property {} in column {}: skip ({})&quot;, value, index, e, null);</span>
+<span class="nc" id="L174">			}</span>
+<span class="nc" id="L175">		}</span>
+<span class="nc" id="L176">		return result;</span>
 	}
 
 
 	public void setHeaderRow(int headerRow) {
-<span class="nc" id="L173">		this.headerRow = headerRow;</span>
-<span class="nc" id="L174">	}</span>
+<span class="nc" id="L181">		this.headerRow = headerRow;</span>
+<span class="nc" id="L182">	}</span>
 
 	public ExcelBeanReader headerRow(int headerRow) {
-<span class="nc" id="L177">		setHeaderRow(headerRow);</span>
-<span class="nc" id="L178">		return this;</span>
+<span class="nc" id="L185">		setHeaderRow(headerRow);</span>
+<span class="nc" id="L186">		return this;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

@@ -1,8 +1,8 @@
-com.namics.oss.java.tools.utils
-com.namics.oss.java.tools.utils.csv
-com.namics.oss.java.tools.utils.excel
-com.namics.oss.java.tools.utils.maps
-com.namics.oss.java.tools.utils.properties
-com.namics.oss.java.tools.utils.reflection
 com.namics.oss.java.tools.utils.web
+com.namics.oss.java.tools.utils.reflection
+com.namics.oss.java.tools.utils.csv
+com.namics.oss.java.tools.utils
+com.namics.oss.java.tools.utils.maps
+com.namics.oss.java.tools.utils.excel
+com.namics.oss.java.tools.utils.properties
 com.namics.oss.java.tools.utils.test

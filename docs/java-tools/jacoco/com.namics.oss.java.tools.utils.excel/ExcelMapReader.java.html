@@ -106,7 +106,7 @@ import java.util.*;
 
     private String getStringValue(final Cell cell) {
 <span class="nc bnc" id="L108" title="All 2 branches missed.">        switch (cell.getCellType()) {</span>
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
 <span class="nc" id="L110">                return String.valueOf(cell.getNumericCellValue());</span>
             default:
 <span class="nc" id="L112">                return cell.getRichStringCellValue().getString();</span>

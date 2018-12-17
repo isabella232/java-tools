@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShortGuid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">java-tools</a> &gt; <a href="index.source.html" class="el_package">com.namics.oss.java.tools.utils</a> &gt; <span class="el_source">ShortGuid.java</span></div><h1>ShortGuid.java</h1><pre class="source lang-java linenums">package com.namics.oss.java.tools.utils;
+
+
+import java.nio.ByteBuffer;
+import java.util.Base64;
+import java.util.UUID;
+
+/**
+ * Utility to process short guid.
+ * Short guid is a 22 digit base64 representation of a Type 4 UUID (128 bit)
+ *
+ * @author aschaefer, Namics AG
+ * @since 09.04.18 16:12
+ */
+public abstract class ShortGuid {
+
+<span class="nc" id="L17">    public static final Base64.Encoder ENCODER = Base64.getEncoder().withoutPadding();</span>
+<span class="nc" id="L18">    public static final Base64.Decoder DECODER = Base64.getDecoder();</span>
+
+    public static final int SHORT_GUID_LENGTH = 22;
+    public static final String SHORT_GUID_PATTERN = &quot;.{&quot; + SHORT_GUID_LENGTH + &quot;,&quot; + SHORT_GUID_LENGTH + &quot;}&quot;;
+
+    private ShortGuid() {
+        //hide util const
+    }
+
+    /**
+     * Generate a short UUID - 22 digit base64 representation of a UUID.
+     *
+     * @return 22 digit base64 representation of a UUID
+     */
+    public static String shortGuid() {
+<span class="nc" id="L33">        UUID uuid = UUID.randomUUID();</span>
+<span class="nc" id="L34">        return shortGuid(uuid);</span>
+    }
+
+    /**
+     * Format a UUID to short UUID - 22 digit base64 representation of a UUID.
+     *
+     * @param uuid UUID to be formatted
+     * @return 22 digit base64 representation of a UUID, null for null
+     */
+    public static String shortGuid(UUID uuid) {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (uuid == null) {</span>
+<span class="nc" id="L45">            return null;</span>
+        }
+<span class="nc" id="L47">        byte[] array = toByteArray(uuid);</span>
+<span class="nc" id="L48">        return ENCODER.encodeToString(array);</span>
+    }
+
+    /**
+     * parse 22 digit base64 UUID representation to actual UUID.
+     *
+     * @param candidate string that represents UUID in short GUID format
+     * @return UUID represented by string, null for null
+     * @throws IllegalArgumentException if candidate is not a 22 digit base64 UUID representation
+     */
+    public static UUID parseShortGuid(String candidate) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (candidate == null) {</span>
+<span class="nc" id="L60">            return null;</span>
+        }
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (candidate.length() == SHORT_GUID_LENGTH) {</span>
+<span class="nc" id="L63">            return fromByteArray(DECODER.decode(candidate));</span>
+        }
+<span class="nc" id="L65">        throw new IllegalArgumentException(candidate + &quot; is not a short guid&quot;);</span>
+    }
+
+    /**
+     * Convert UUID to 16 byte array.
+     *
+     * @param uuid uuid to get byte representation
+     * @return 16 byte array, null for null
+     */
+    public static byte[] toByteArray(UUID uuid) {
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (uuid == null) {</span>
+<span class="nc" id="L76">            return null;</span>
+        }
+<span class="nc" id="L78">        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);</span>
+<span class="nc" id="L79">        bb.putLong(uuid.getMostSignificantBits());</span>
+<span class="nc" id="L80">        bb.putLong(uuid.getLeastSignificantBits());</span>
+<span class="nc" id="L81">        return bb.array();</span>
+    }
+
+
+    /**
+     * Read UUID from 16 byte array.
+     *
+     * @param data 16 bytes representing a UUID
+     * @return UUID represented by byte array, null for null
+     * @throws IllegalArgumentException if candidate is not a 16 byte array
+     */
+    public static UUID fromByteArray(byte[] data) {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (data == null) {</span>
+<span class="nc" id="L94">            return null;</span>
+        }
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (data.length != 16) {</span>
+<span class="nc" id="L97">            throw new IllegalArgumentException(&quot;data must be 16 byte&quot;);</span>
+        }
+<span class="nc" id="L99">        long msb = 0;</span>
+<span class="nc" id="L100">        long lsb = 0;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (int i = 0; i &lt; 8; i++) {</span>
+<span class="nc" id="L102">            msb = (msb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
+        }
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (int i = 8; i &lt; 16; i++) {</span>
+<span class="nc" id="L105">            lsb = (lsb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
+        }
+<span class="nc" id="L107">        return new UUID(msb, lsb);</span>
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>
