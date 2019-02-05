@@ -7,18 +7,17 @@ import java.util.UUID;
 
 /**
  * Utility to process short guid.
- * Short guid is a 22 digit base64 representation of a Type 4 UUID (128 bit)
+ * Short guid is a 22 digit url save base64 representation of a Type 4 UUID (128 bit)
  *
  * @author aschaefer, Namics AG
  * @since 09.04.18 16:12
  */
 public abstract class ShortGuid {
 
-    public static final Base64.Encoder ENCODER = Base64.getEncoder().withoutPadding();
-    public static final Base64.Decoder DECODER = Base64.getDecoder();
+    public static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
+    public static final Base64.Decoder DECODER = Base64.getUrlDecoder();
 
     public static final int SHORT_GUID_LENGTH = 22;
-    public static final String SHORT_GUID_PATTERN = ".{" + SHORT_GUID_LENGTH + "," + SHORT_GUID_LENGTH + "}";
 
     private ShortGuid() {
         //hide util const
