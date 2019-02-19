@@ -4,12 +4,11 @@
 
 package com.namics.oss.java.tools.utils.maps;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * MapUtilsTest.
@@ -17,19 +16,20 @@ import static org.junit.Assert.assertNotNull;
  * @author aschaefer, Namics AG
  * @since 13.06.14 10:49
  */
-public class MapUtilsTest {
+class MapUtilsTest {
 
 	@Test
-	public void testPutMap() throws Exception {
+	void testPutMap() throws Exception {
 		Map<String, String> map = MapUtils.put("KEY", "VALUE")
-				.put("ANOTHER", "VALUE")
-				.map();
+		                                  .put("ANOTHER", "VALUE")
+		                                  .map();
 		assertNotNull(map);
 		assertEquals(2, map.size());
 	}
+
 	@Test
-	public void testPutNullTyped() throws Exception {
-		Map<String, String> map = MapUtils.<String,String>put(null, null)
+	void testPutNullTyped() throws Exception {
+		Map<String, String> map = MapUtils.<String, String>put(null, null)
 				.put("ANOTHER", "VALUE")
 				.map();
 		assertNotNull(map);
@@ -37,10 +37,10 @@ public class MapUtilsTest {
 	}
 
 	@Test
-	public void testPutUntyped() throws Exception {
+	void testPutUntyped() throws Exception {
 		Map map = MapUtils.put(null, null)
-				.put("ANOTHER", "VALUE")
-				.map();
+		                  .put("ANOTHER", "VALUE")
+		                  .map();
 		assertNotNull(map);
 		assertEquals(2, map.size());
 	}

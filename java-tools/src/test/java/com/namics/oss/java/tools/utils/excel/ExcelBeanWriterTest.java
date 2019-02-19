@@ -8,22 +8,27 @@ import com.namics.commons.random.RandomData;
 import com.namics.oss.java.tools.utils.bean.TestBean;
 import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.junit.Assert.assertThat;
 
 /**
  * ExcelBeanWriterTest.
@@ -31,7 +36,7 @@ import static org.junit.Assert.assertThat;
  * @author aschaefer, Namics AG
  * @since 21.07.15 09:04
  */
-public class ExcelBeanWriterTest {
+class ExcelBeanWriterTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ExcelBeanWriterTest.class);
 
 	TestBean[] testBeans = new TestBean[] {
@@ -41,8 +46,10 @@ public class ExcelBeanWriterTest {
 
 
 	@Test
-	public void testWrite() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-test.xlsx";
+	void testWrite() throws Exception {
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
 		LOG.info("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			new ExcelBeanWriter().write(Arrays.asList(testBeans), out);
@@ -52,9 +59,11 @@ public class ExcelBeanWriterTest {
 	}
 
 	@Test
-	public void testWriteLargeAmount() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-bulk-test.xlsx";
-		LOG.info("{}", absolute);
+	void testWriteLargeAmount() throws Exception {
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
+		LOG.debug("{}", absolute);
 		TestBean[] bulk = new TestBean[1000];
 		for (int i = 0; i < 1000; i++) {
 			bulk[i] = RandomData.random(TestBean.class);
@@ -68,7 +77,7 @@ public class ExcelBeanWriterTest {
 	}
 
 	@Test
-	public void testMapping() throws IOException {
+	void testMapping() throws IOException {
 		TestBean[] testBeansMapped = new TestBean[] {
 				new TestBean().username("Hans").firstname("hmuster").lastname("Muster"),
 				new TestBean().username("Erika").firstname("emuster").lastname("Muster"),
@@ -77,8 +86,10 @@ public class ExcelBeanWriterTest {
 		mapping.put("username", "firstname");
 		mapping.put("firstname", "username");
 		mapping.put("lastname", "lastname");
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-test.xlsx";
-		LOG.info("{}", absolute);
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
+		LOG.debug("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			new ExcelBeanWriter().write(Arrays.asList(testBeans), out, mapping);
 		}
@@ -87,7 +98,7 @@ public class ExcelBeanWriterTest {
 	}
 
 	@Test
-	public void testWriteHeaderRow() throws NoSuchMethodException {
+	void testWriteHeaderRow() throws NoSuchMethodException {
 		// Given
 		Class<TestBean> clazz = TestBean.class;
 
@@ -113,8 +124,10 @@ public class ExcelBeanWriterTest {
 	private void checkIfFileContainsBeans(final String absolute, final TestBean[] bulk) throws IOException {
 		try (InputStream input = new FileInputStream(absolute)) {
 			List<TestBean> verify = new ExcelBeanReader().read(TestBean.class, input);
-			for (TestBean testBean : verify) {
-				LOG.info("{}", testBean);
+			if (LOG.isDebugEnabled()) {
+				for (TestBean testBean : verify) {
+					LOG.debug("{}", testBean);
+				}
 			}
 			assertThat(verify, containsInAnyOrder(bulk));
 		}

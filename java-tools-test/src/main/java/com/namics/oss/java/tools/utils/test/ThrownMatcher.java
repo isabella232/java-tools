@@ -1,7 +1,6 @@
 package com.namics.oss.java.tools.utils.test;
 
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -20,7 +19,6 @@ public class ThrownMatcher extends TypeSafeMatcher<Runnable> {
 		expected = s;
 	}
 
-	@Factory
 	public static Matcher<Runnable> thrown(Class<? extends Throwable> expected) {
 		return new ThrownMatcher(expected.getName());
 	}

@@ -118,7 +118,7 @@ public class ExcelBeanReader {
 				}
 			}
 		}
-		LOG.info("Read bean {}", bean);
+		LOG.debug("Read bean {}", bean);
 		return bean;
 
 	}

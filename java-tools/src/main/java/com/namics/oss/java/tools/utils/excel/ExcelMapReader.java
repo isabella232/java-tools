@@ -99,7 +99,7 @@ public class ExcelMapReader {
                 }
             }
         }
-        LOG.info("Read map {}", map);
+        LOG.debug("Read map {}", map);
         return map;
 
     }

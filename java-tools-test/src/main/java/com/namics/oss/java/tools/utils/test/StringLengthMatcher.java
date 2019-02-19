@@ -1,7 +1,6 @@
 package com.namics.oss.java.tools.utils.test;
 
 import org.hamcrest.Description;
-import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
@@ -18,12 +17,10 @@ public class StringLengthMatcher extends TypeSafeMatcher<CharSequence> {
 		this.lengthMatcher = lengthMatcher;
 	}
 
-	@Factory
 	public static StringLengthMatcher hasLength(Matcher<? super Integer> lengthMatcher) {
 		return new StringLengthMatcher(lengthMatcher);
 	}
 
-	@Factory
 	public static StringLengthMatcher hasLength(int length) {
 		return hasLength(Matchers.equalTo(length));
 	}

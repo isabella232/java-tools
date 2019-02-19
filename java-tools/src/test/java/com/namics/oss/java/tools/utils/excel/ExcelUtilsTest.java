@@ -5,10 +5,11 @@
 package com.namics.oss.java.tools.utils.excel;
 
 import com.namics.oss.java.tools.utils.bean.TestBean;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -17,9 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  * ExcelUtilsTest.
@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
  * @author aschaefer, Namics AG
  * @since 21.07.15 10:05
  */
-public class ExcelUtilsTest {
+class ExcelUtilsTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ExcelUtilsTest.class);
 
 	TestBean[] testBeans = new TestBean[] {
@@ -37,8 +37,11 @@ public class ExcelUtilsTest {
 
 
 	@Test
-	public void testWriteRead() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/util-test.xlsx";
+	void testWriteRead() throws Exception {
+		File file = File.createTempFile("ExcelUtilsTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
+
 		LOG.info("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			ExcelUtils.write(Arrays.asList(testBeans), out, "pleaseIgnore");

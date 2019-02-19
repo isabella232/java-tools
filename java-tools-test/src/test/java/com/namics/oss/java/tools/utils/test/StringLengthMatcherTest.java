@@ -4,11 +4,11 @@
 
 package com.namics.oss.java.tools.utils.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.namics.oss.java.tools.utils.test.StringLengthMatcher.hasLength;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * StringLengthMatcherTest.
@@ -16,15 +16,15 @@ import static org.junit.Assert.fail;
  * @author aschaefer, Namics AG
  * @since 30.01.18 08:49
  */
-public class StringLengthMatcherTest {
+class StringLengthMatcherTest {
 
 	@Test
-	public void hasLengthOk() {
+	void hasLengthOk() {
 		assertThat("1234", hasLength(4));
 	}
 
 	@Test
-	public void hasLengthNotOk() {
+	void hasLengthNotOk() {
 		try {
 			assertThat("12345", hasLength(4));
 			fail();
