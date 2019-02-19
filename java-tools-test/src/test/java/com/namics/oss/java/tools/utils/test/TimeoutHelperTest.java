@@ -5,7 +5,7 @@
 package com.namics.oss.java.tools.utils.test;
 
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.namics.oss.java.tools.utils.test.TimeoutHelper.sleep;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,9 +16,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * @author aschaefer, Namics AG
  * @since 30.01.18 08:51
  */
-public class TimeoutHelperTest {
+class TimeoutHelperTest {
 	@Test
-	public void timeout() {
+	void timeout() {
 		long before = System.currentTimeMillis();
 		sleep(10);
 		long after = System.currentTimeMillis();

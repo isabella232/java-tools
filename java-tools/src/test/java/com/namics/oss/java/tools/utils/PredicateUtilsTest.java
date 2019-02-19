@@ -4,14 +4,14 @@
 
 package com.namics.oss.java.tools.utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.function.Predicate;
 
 import static com.namics.oss.java.tools.utils.ArrayUtils.stream;
 import static java.util.stream.Collectors.toList;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
 
 /**
  * PredicateUtilsTest.
@@ -19,10 +19,10 @@ import static org.junit.Assert.assertThat;
  * @author aschaefer, Namics AG
  * @since 05.02.16 08:23
  */
-public class PredicateUtilsTest {
+class PredicateUtilsTest {
 
 	@Test
-	public void testNot() throws Exception {
+	void testNot() throws Exception {
 		assertThat(stream("test", null, "test2")
 				           .filter(PredicateUtils.not(item -> item == null))
 				           .collect(toList()),
@@ -30,7 +30,7 @@ public class PredicateUtilsTest {
 	}
 
 	@Test
-	public void testNotNull() throws Exception {
+	void testNotNull() throws Exception {
 		assertThat(stream("test", null, "test2")
 				           .filter(PredicateUtils.notNull())
 				           .collect(toList()),
@@ -38,7 +38,7 @@ public class PredicateUtilsTest {
 	}
 
 	@Test
-	public void testAsPredicate() throws Exception {
+	void testAsPredicate() throws Exception {
 		Predicate<?> predicate = PredicateUtils.as(item -> item == null).negate();
 	}
 

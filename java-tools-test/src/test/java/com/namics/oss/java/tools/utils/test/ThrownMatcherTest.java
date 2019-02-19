@@ -4,11 +4,11 @@
 
 package com.namics.oss.java.tools.utils.test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.namics.oss.java.tools.utils.test.ThrownMatcher.thrown;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * ThrownMatcherTest.
@@ -16,21 +16,21 @@ import static org.junit.Assert.assertThat;
  * @author aschaefer, Namics AG
  * @since 10.05.16 14:48
  */
-public class ThrownMatcherTest {
+class ThrownMatcherTest {
 	@Test
-	public void thrownExceptionShouldBeOk() throws Exception {
+	void thrownExceptionShouldBeOk() throws Exception {
 		assertThat(() -> {
 			throw new IllegalArgumentException();
 		}, thrown(IllegalArgumentException.class));
 	}
 
 	@Test
-	public void missingExceptionShouldFail() throws Exception {
+	void missingExceptionShouldFail() throws Exception {
 		try {
 
 			assertThat(() -> {
 			}, thrown(IllegalArgumentException.class));
-			Assert.fail("Exception not detected");
+			fail("Exception not detected");
 		} catch (AssertionError e) {
 			// ok
 		}
