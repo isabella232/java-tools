@@ -58,7 +58,7 @@ class ExcelBeanWriterTest {
 	@Test
 	void testWriteLargeAmount() throws Exception {
 		String absolute = getClass().getResource("/").getFile() + "excel/writer-bulk-test.xlsx";
-		LOG.info("{}", absolute);
+		LOG.debug("{}", absolute);
 		TestBean[] bulk = new TestBean[1000];
 		for (int i = 0; i < 1000; i++) {
 			bulk[i] = RandomData.random(TestBean.class);
@@ -82,7 +82,7 @@ class ExcelBeanWriterTest {
 		mapping.put("firstname", "username");
 		mapping.put("lastname", "lastname");
 		String absolute = getClass().getResource("/").getFile() + "excel/writer-test.xlsx";
-		LOG.info("{}", absolute);
+		LOG.debug("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			new ExcelBeanWriter().write(Arrays.asList(testBeans), out, mapping);
 		}
@@ -117,8 +117,10 @@ class ExcelBeanWriterTest {
 	private void checkIfFileContainsBeans(final String absolute, final TestBean[] bulk) throws IOException {
 		try (InputStream input = new FileInputStream(absolute)) {
 			List<TestBean> verify = new ExcelBeanReader().read(TestBean.class, input);
-			for (TestBean testBean : verify) {
-				LOG.info("{}", testBean);
+			if (LOG.isDebugEnabled()) {
+				for (TestBean testBean : verify) {
+					LOG.debug("{}", testBean);
+				}
 			}
 			assertThat(verify, containsInAnyOrder(bulk));
 		}
