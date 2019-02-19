@@ -45,7 +45,7 @@ import java.util.regex.Pattern;
 	 * Pattern for detecting CGLIB-renamed methods.
 	 * @see #isCglibRenamedMethod
 	 */
-<span class="nc" id="L48">	private static final Pattern CGLIB_RENAMED_METHOD_PATTERN = Pattern.compile(&quot;CGLIB\\$(.+)\\$\\d+&quot;);</span>
+<span class="fc" id="L48">	private static final Pattern CGLIB_RENAMED_METHOD_PATTERN = Pattern.compile(&quot;CGLIB\\$(.+)\\$\\d+&quot;);</span>
 
 
 	/**
@@ -420,11 +420,11 @@ import java.util.regex.Pattern;
 	 * @see java.lang.reflect.Method#setAccessible
 	 */
 	public static void makeAccessible(Method method) {
-<span class="nc bnc" id="L423" title="All 4 branches missed.">		if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))</span>
+<span class="pc bpc" id="L423" title="2 of 4 branches missed.">		if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))</span>
 <span class="nc bnc" id="L424" title="All 2 branches missed.">				&amp;&amp; !method.isAccessible()) {</span>
 <span class="nc" id="L425">			method.setAccessible(true);</span>
 		}
-<span class="nc" id="L427">	}</span>
+<span class="fc" id="L427">	}</span>
 
 	/**
 	 * Make the given constructor accessible, explicitly setting it accessible
@@ -664,7 +664,7 @@ import java.util.regex.Pattern;
 	/**
 	 * Pre-built FieldFilter that matches all non-static, non-final fields.
 	 */
-<span class="nc" id="L667">	public static FieldFilter COPYABLE_FIELDS = new FieldFilter() {</span>
+<span class="fc" id="L667">	public static FieldFilter COPYABLE_FIELDS = new FieldFilter() {</span>
 
 		public boolean matches(Field field) {
 <span class="nc bnc" id="L670" title="All 4 branches missed.">			return !(Modifier.isStatic(field.getModifiers()) || Modifier.isFinal(field.getModifiers()));</span>
@@ -675,7 +675,7 @@ import java.util.regex.Pattern;
 	/**
 	 * Pre-built MethodFilter that matches all non-bridge methods.
 	 */
-<span class="nc" id="L678">	public static MethodFilter NON_BRIDGED_METHODS = new MethodFilter() {</span>
+<span class="fc" id="L678">	public static MethodFilter NON_BRIDGED_METHODS = new MethodFilter() {</span>
 
 		public boolean matches(Method method) {
 <span class="nc bnc" id="L681" title="All 2 branches missed.">			return !method.isBridge();</span>
@@ -687,7 +687,7 @@ import java.util.regex.Pattern;
 	 * Pre-built MethodFilter that matches all non-bridge methods
 	 * which are not declared on {@code java.lang.Object}.
 	 */
-<span class="nc" id="L690">	public static MethodFilter USER_DECLARED_METHODS = new MethodFilter() {</span>
+<span class="fc" id="L690">	public static MethodFilter USER_DECLARED_METHODS = new MethodFilter() {</span>
 
 		public boolean matches(Method method) {
 <span class="nc bnc" id="L693" title="All 4 branches missed.">			return (!method.isBridge() &amp;&amp; method.getDeclaringClass() != Object.class);</span>

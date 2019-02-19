@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 	 */
 	@SafeVarargs
 	public static &lt;T&gt; T[] array(T... input) {
-<span class="nc" id="L30">		return input;</span>
+<span class="fc" id="L30">		return input;</span>
 	}
 
 	/**
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 	 */
 	@SafeVarargs
 	public static &lt;T&gt; Stream&lt;T&gt; stream(T... array) {
-<span class="nc" id="L44">		return Arrays.stream(array);</span>
+<span class="fc" id="L44">		return Arrays.stream(array);</span>
 	}
 
 
@@ -59,10 +59,10 @@ import java.util.stream.Stream;
 	 */
 	@SuppressWarnings(&quot;unchecked&quot;)
 	public static &lt;T&gt; T[] copyOf(T[] original) {
-<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (original == null) {</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">		if (original == null) {</span>
 <span class="nc" id="L63">			return null;</span>
 		}
-<span class="nc" id="L65">		return (T[]) Arrays.copyOf(original, original.length);</span>
+<span class="fc" id="L65">		return (T[]) Arrays.copyOf(original, original.length);</span>
 	}
 
 
@@ -219,22 +219,22 @@ import java.util.stream.Stream;
 	 * @return joined array, new instance guaranteed
 	 */
 	public static &lt;T&gt; T[] join(T[] base, T... join) {
-<span class="nc bnc" id="L222" title="All 2 branches missed.">		if (base == null) {</span>
-<span class="nc" id="L223">			return copyOf(join);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">		if (base == null) {</span>
+<span class="fc" id="L223">			return copyOf(join);</span>
 		}
-<span class="nc bnc" id="L225" title="All 2 branches missed.">		if (join == null) {</span>
-<span class="nc" id="L226">			return copyOf(base);</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">		if (join == null) {</span>
+<span class="fc" id="L226">			return copyOf(base);</span>
 		}
-<span class="nc" id="L228">		int newLength = base.length + join.length;</span>
-<span class="nc" id="L229">		Class&lt;?&gt; newType =  base.getClass();</span>
+<span class="fc" id="L228">		int newLength = base.length + join.length;</span>
+<span class="fc" id="L229">		Class&lt;?&gt; newType =  base.getClass();</span>
 
 		@SuppressWarnings(&quot;unchecked&quot;)
-<span class="nc bnc" id="L232" title="All 2 branches missed.">		T[] result = ((Object)newType == (Object)Object[].class)</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">		T[] result = ((Object)newType == (Object)Object[].class)</span>
 				? (T[]) new Object[newLength]
-<span class="nc" id="L234">				: (T[]) Array.newInstance(newType.getComponentType(), newLength);</span>
-<span class="nc" id="L235">		System.arraycopy(base, 0, result, 0, base.length);</span>
-<span class="nc" id="L236">		System.arraycopy(join, 0, result, base.length, join.length);</span>
-<span class="nc" id="L237">		return result;</span>
+<span class="fc" id="L234">				: (T[]) Array.newInstance(newType.getComponentType(), newLength);</span>
+<span class="fc" id="L235">		System.arraycopy(base, 0, result, 0, base.length);</span>
+<span class="fc" id="L236">		System.arraycopy(join, 0, result, base.length, join.length);</span>
+<span class="fc" id="L237">		return result;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

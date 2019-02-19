@@ -12,11 +12,11 @@
 <a class="jxr_linenumber" name="L4" href="#L4">4</a>   
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">package</strong> com.namics.oss.java.tools.utils.test;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.Assert;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.namics.oss.java.tools.utils.test.ThrownMatcher.thrown;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.Assert.assertThat;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.namics.oss.java.tools.utils.test.ThrownMatcher.thrown;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.MatcherAssert.assertThat;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.fail;
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_javadoccomment"> * ThrownMatcherTest.</em>
@@ -24,21 +24,21 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * @author aschaefer, Namics AG</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * @since 10.05.16 14:48</em>
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../com/namics/oss/java/tools/utils/test/ThrownMatcherTest.html">ThrownMatcherTest</a> {
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../../../com/namics/oss/java/tools/utils/test/ThrownMatcherTest.html">ThrownMatcherTest</a> {
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	@Test
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> thrownExceptionShouldBeOk() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">void</strong> thrownExceptionShouldBeOk() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  		assertThat(() -&gt; {
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  		}, thrown(IllegalArgumentException.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  	}
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	@Test
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> missingExceptionShouldFail() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">void</strong> missingExceptionShouldFail() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  			assertThat(() -&gt; {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  			}, thrown(IllegalArgumentException.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			Assert.fail(<span class="jxr_string">"Exception not detected"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			fail(<span class="jxr_string">"Exception not detected"</span>);
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  			<em class="jxr_comment">// ok</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		}

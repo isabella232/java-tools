@@ -20,9 +20,9 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 	/**
 	 * Create a builder with a default map implementation.
 	 */
-<span class="nc" id="L23">	public MapBuilder() {</span>
-<span class="nc" id="L24">		this.target = new HashMap&lt;KEY, VALUE&gt;();</span>
-<span class="nc" id="L25">	}</span>
+<span class="fc" id="L23">	public MapBuilder() {</span>
+<span class="fc" id="L24">		this.target = new HashMap&lt;KEY, VALUE&gt;();</span>
+<span class="fc" id="L25">	}</span>
 
 	/**
 	 * Create a builder to populate an existing Map instances.
@@ -30,9 +30,9 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 	 *
 	 * @param target Map Instance to be populated.
 	 */
-<span class="nc" id="L33">	public MapBuilder(Map&lt;KEY, VALUE&gt; target) {</span>
-<span class="nc" id="L34">		this.target = target;</span>
-<span class="nc" id="L35">	}</span>
+<span class="fc" id="L33">	public MapBuilder(Map&lt;KEY, VALUE&gt; target) {</span>
+<span class="fc" id="L34">		this.target = target;</span>
+<span class="fc" id="L35">	}</span>
 
 	/**
 	 * Create a builder to create a map of the provided type.
@@ -61,15 +61,15 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 	 *                                     of this class
 	 *                                     &lt;/ul&gt;
 	 */
-<span class="nc" id="L64">	public &lt;MAP extends Map&lt;KEY, VALUE&gt;&gt; MapBuilder(Class&lt;MAP&gt; clazz) {</span>
+<span class="fc" id="L64">	public &lt;MAP extends Map&lt;KEY, VALUE&gt;&gt; MapBuilder(Class&lt;MAP&gt; clazz) {</span>
 		try {
-<span class="nc" id="L66">			this.target = clazz.newInstance();</span>
+<span class="fc" id="L66">			this.target = clazz.newInstance();</span>
 <span class="nc" id="L67">		} catch (IllegalAccessException e) {</span>
 <span class="nc" id="L68">			throw new IllegalArgumentException(e);</span>
 <span class="nc" id="L69">		} catch (InstantiationException e) {</span>
 <span class="nc" id="L70">			throw new IllegalArgumentException(e);</span>
-<span class="nc" id="L71">		}</span>
-<span class="nc" id="L72">	}</span>
+<span class="fc" id="L71">		}</span>
+<span class="fc" id="L72">	}</span>
 
 	/**
 	 * Put key value pair into map to be build
@@ -79,8 +79,8 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 	 * @return this builder for fluent programming
 	 */
 	public MapBuilder&lt;KEY, VALUE&gt; put(KEY key, VALUE value) {
-<span class="nc" id="L82">		this.target.put(key, value);</span>
-<span class="nc" id="L83">		return this;</span>
+<span class="fc" id="L82">		this.target.put(key, value);</span>
+<span class="fc" id="L83">		return this;</span>
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 	 * @return current state of map build with this builder.
 	 */
 	public Map&lt;KEY, VALUE&gt; map() {
-<span class="nc" id="L92">		return this.target;</span>
+<span class="fc" id="L92">		return this.target;</span>
 	}
 
 	/**
@@ -101,21 +101,21 @@ public class MapBuilder&lt;KEY, VALUE&gt; {
 
 		Map&lt;KEY, VALUE&gt; current;
 		try {
-<span class="nc" id="L104">			current = this.target.getClass().newInstance();</span>
+<span class="fc" id="L104">			current = this.target.getClass().newInstance();</span>
 <span class="nc" id="L105">		} catch (Throwable e) {</span>
 <span class="nc" id="L106">			current = new HashMap&lt;KEY, VALUE&gt;();</span>
-<span class="nc" id="L107">		}</span>
-<span class="nc" id="L108">		current.putAll(this.target);</span>
-<span class="nc" id="L109">		return Collections.unmodifiableMap(current);</span>
+<span class="fc" id="L107">		}</span>
+<span class="fc" id="L108">		current.putAll(this.target);</span>
+<span class="fc" id="L109">		return Collections.unmodifiableMap(current);</span>
 	}
 
 	public SortedMap&lt;KEY, VALUE&gt; sorted() {
-<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (this.target instanceof SortedMap) {</span>
-<span class="nc" id="L114">			return (SortedMap) this.target;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		if (this.target instanceof SortedMap) {</span>
+<span class="fc" id="L114">			return (SortedMap) this.target;</span>
 		}
-<span class="nc" id="L116">		TreeMap&lt;KEY, VALUE&gt; sorted = new TreeMap&lt;KEY, VALUE&gt;();</span>
-<span class="nc" id="L117">		sorted.putAll(this.target);</span>
-<span class="nc" id="L118">		return sorted;</span>
+<span class="fc" id="L116">		TreeMap&lt;KEY, VALUE&gt; sorted = new TreeMap&lt;KEY, VALUE&gt;();</span>
+<span class="fc" id="L117">		sorted.putAll(this.target);</span>
+<span class="fc" id="L118">		return sorted;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

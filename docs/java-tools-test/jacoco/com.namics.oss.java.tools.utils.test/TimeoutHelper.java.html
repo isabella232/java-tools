@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * @since 21.08.15 11:26
  */
 <span class="nc" id="L16">public abstract class TimeoutHelper {</span>
-<span class="nc" id="L17">	private static final Logger LOG = LoggerFactory.getLogger(TimeoutHelper.class);</span>
+<span class="fc" id="L17">	private static final Logger LOG = LoggerFactory.getLogger(TimeoutHelper.class);</span>
 
 	/**
 	 * Silent sleep current thread.
@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 	 */
 	public static void sleep(long millis) {
 		try {
-<span class="nc" id="L26">			Thread.sleep(millis);</span>
+<span class="fc" id="L26">			Thread.sleep(millis);</span>
 <span class="nc" id="L27">		} catch (InterruptedException e) {</span>
 <span class="nc" id="L28">			LOG.debug(&quot;sleep for {} ms failed: {}&quot;, millis, e, null);</span>
-<span class="nc" id="L29">		}</span>
-<span class="nc" id="L30">	}</span>
+<span class="fc" id="L29">		}</span>
+<span class="fc" id="L30">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

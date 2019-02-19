@@ -14,8 +14,8 @@ import java.util.UUID;
  */
 public abstract class ShortGuid {
 
-<span class="nc" id="L17">    public static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();</span>
-<span class="nc" id="L18">    public static final Base64.Decoder DECODER = Base64.getUrlDecoder();</span>
+<span class="fc" id="L17">    public static final Base64.Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();</span>
+<span class="fc" id="L18">    public static final Base64.Decoder DECODER = Base64.getUrlDecoder();</span>
 
     public static final int SHORT_GUID_LENGTH = 22;
 
@@ -29,8 +29,8 @@ public abstract class ShortGuid {
      * @return 22 digit base64 representation of a UUID
      */
     public static String shortGuid() {
-<span class="nc" id="L32">        UUID uuid = UUID.randomUUID();</span>
-<span class="nc" id="L33">        return shortGuid(uuid);</span>
+<span class="fc" id="L32">        UUID uuid = UUID.randomUUID();</span>
+<span class="fc" id="L33">        return shortGuid(uuid);</span>
     }
 
     /**
@@ -40,11 +40,11 @@ public abstract class ShortGuid {
      * @return 22 digit base64 representation of a UUID, null for null
      */
     public static String shortGuid(UUID uuid) {
-<span class="nc bnc" id="L43" title="All 2 branches missed.">        if (uuid == null) {</span>
-<span class="nc" id="L44">            return null;</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (uuid == null) {</span>
+<span class="fc" id="L44">            return null;</span>
         }
-<span class="nc" id="L46">        byte[] array = toByteArray(uuid);</span>
-<span class="nc" id="L47">        return ENCODER.encodeToString(array);</span>
+<span class="fc" id="L46">        byte[] array = toByteArray(uuid);</span>
+<span class="fc" id="L47">        return ENCODER.encodeToString(array);</span>
     }
 
     /**
@@ -55,13 +55,13 @@ public abstract class ShortGuid {
      * @throws IllegalArgumentException if candidate is not a 22 digit base64 UUID representation
      */
     public static UUID parseShortGuid(String candidate) {
-<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (candidate == null) {</span>
-<span class="nc" id="L59">            return null;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (candidate == null) {</span>
+<span class="fc" id="L59">            return null;</span>
         }
-<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (candidate.length() == SHORT_GUID_LENGTH) {</span>
-<span class="nc" id="L62">            return fromByteArray(DECODER.decode(candidate));</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (candidate.length() == SHORT_GUID_LENGTH) {</span>
+<span class="fc" id="L62">            return fromByteArray(DECODER.decode(candidate));</span>
         }
-<span class="nc" id="L64">        throw new IllegalArgumentException(candidate + &quot; is not a short guid&quot;);</span>
+<span class="fc" id="L64">        throw new IllegalArgumentException(candidate + &quot; is not a short guid&quot;);</span>
     }
 
     /**
@@ -71,13 +71,13 @@ public abstract class ShortGuid {
      * @return 16 byte array, null for null
      */
     public static byte[] toByteArray(UUID uuid) {
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (uuid == null) {</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (uuid == null) {</span>
 <span class="nc" id="L75">            return null;</span>
         }
-<span class="nc" id="L77">        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);</span>
-<span class="nc" id="L78">        bb.putLong(uuid.getMostSignificantBits());</span>
-<span class="nc" id="L79">        bb.putLong(uuid.getLeastSignificantBits());</span>
-<span class="nc" id="L80">        return bb.array();</span>
+<span class="fc" id="L77">        ByteBuffer bb = ByteBuffer.wrap(new byte[16]);</span>
+<span class="fc" id="L78">        bb.putLong(uuid.getMostSignificantBits());</span>
+<span class="fc" id="L79">        bb.putLong(uuid.getLeastSignificantBits());</span>
+<span class="fc" id="L80">        return bb.array();</span>
     }
 
 
@@ -89,21 +89,21 @@ public abstract class ShortGuid {
      * @throws IllegalArgumentException if candidate is not a 16 byte array
      */
     public static UUID fromByteArray(byte[] data) {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (data == null) {</span>
-<span class="nc" id="L93">            return null;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (data == null) {</span>
+<span class="fc" id="L93">            return null;</span>
         }
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (data.length != 16) {</span>
-<span class="nc" id="L96">            throw new IllegalArgumentException(&quot;data must be 16 byte&quot;);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (data.length != 16) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException(&quot;data must be 16 byte&quot;);</span>
         }
-<span class="nc" id="L98">        long msb = 0;</span>
-<span class="nc" id="L99">        long lsb = 0;</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (int i = 0; i &lt; 8; i++) {</span>
-<span class="nc" id="L101">            msb = (msb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
+<span class="fc" id="L98">        long msb = 0;</span>
+<span class="fc" id="L99">        long lsb = 0;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">        for (int i = 0; i &lt; 8; i++) {</span>
+<span class="fc" id="L101">            msb = (msb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
         }
-<span class="nc bnc" id="L103" title="All 2 branches missed.">        for (int i = 8; i &lt; 16; i++) {</span>
-<span class="nc" id="L104">            lsb = (lsb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        for (int i = 8; i &lt; 16; i++) {</span>
+<span class="fc" id="L104">            lsb = (lsb &lt;&lt; 8) | (data[i] &amp; 0xff);</span>
         }
-<span class="nc" id="L106">        return new UUID(msb, lsb);</span>
+<span class="fc" id="L106">        return new UUID(msb, lsb);</span>
     }
 
 

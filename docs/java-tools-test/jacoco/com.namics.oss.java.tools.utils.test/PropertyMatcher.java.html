@@ -25,23 +25,23 @@ import static java.util.Arrays.asList;
 public class PropertyMatcher extends TypeSafeMatcher&lt;Object&gt; {
 
 	private final Object reference;
-<span class="nc" id="L28">	private String[] ignores ={&quot;class&quot;};</span>
-<span class="nc" id="L29">	private List&lt;String&gt; ignoreList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L28">	private String[] ignores ={&quot;class&quot;};</span>
+<span class="fc" id="L29">	private List&lt;String&gt; ignoreList = new ArrayList&lt;&gt;();</span>
 	{
-<span class="nc" id="L31">		ignoreList.add(&quot;class&quot;);</span>
+<span class="fc" id="L31">		ignoreList.add(&quot;class&quot;);</span>
 	}
-<span class="nc" id="L33">	private final Map&lt;String, String&gt; report = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L33">	private final Map&lt;String, String&gt; report = new HashMap&lt;&gt;();</span>
 
-<span class="nc" id="L35">	public PropertyMatcher(final Object reference) {</span>
-<span class="nc" id="L36">		this.reference = reference;</span>
-<span class="nc" id="L37">	}</span>
+<span class="fc" id="L35">	public PropertyMatcher(final Object reference) {</span>
+<span class="fc" id="L36">		this.reference = reference;</span>
+<span class="fc" id="L37">	}</span>
 
 
 	@Override
 	public void describeTo(final Description description) {
-<span class="nc" id="L42">		description.appendText(&quot;Properties matching those of &quot; + reference);</span>
+<span class="fc" id="L42">		description.appendText(&quot;Properties matching those of &quot; + reference);</span>
 
-<span class="nc" id="L44">	}</span>
+<span class="fc" id="L44">	}</span>
 
 	@Override
 	protected void describeMismatchSafely(Object item, Description mismatchDescription) {
@@ -53,18 +53,18 @@ public class PropertyMatcher extends TypeSafeMatcher&lt;Object&gt; {
 
 	@Override
 	public boolean matchesSafely(final Object candidate) {
-<span class="nc" id="L56">		boolean ok = true;</span>
-<span class="nc" id="L57">		Map&lt;String, Object&gt; references = BeanUtils.getPropertiesMap(reference, ignores);</span>
-<span class="nc" id="L58">		Map&lt;String, Object&gt; actuals = BeanUtils.getPropertiesMap(candidate, ignores);</span>
+<span class="fc" id="L56">		boolean ok = true;</span>
+<span class="fc" id="L57">		Map&lt;String, Object&gt; references = BeanUtils.getPropertiesMap(reference, ignores);</span>
+<span class="fc" id="L58">		Map&lt;String, Object&gt; actuals = BeanUtils.getPropertiesMap(candidate, ignores);</span>
 
-<span class="nc" id="L60">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(candidate.getClass());</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">		for (PropertyDescriptor descriptor : descriptors) {</span>
-<span class="nc bnc" id="L62" title="All 4 branches missed.">			if (!ignoreList.contains(descriptor.getName()) &amp;&amp; !actuals.containsKey(descriptor.getName())) {</span>
+<span class="fc" id="L60">		List&lt;PropertyDescriptor&gt; descriptors = BeanUtils.getPropertyDescriptors(candidate.getClass());</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">		for (PropertyDescriptor descriptor : descriptors) {</span>
+<span class="pc bpc" id="L62" title="3 of 4 branches missed.">			if (!ignoreList.contains(descriptor.getName()) &amp;&amp; !actuals.containsKey(descriptor.getName())) {</span>
 <span class="nc" id="L63">				actuals.put(descriptor.getName(), null);</span>
 			}
-<span class="nc" id="L65">		}</span>
+<span class="fc" id="L65">		}</span>
 
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (Map.Entry&lt;String, Object&gt; actual : actuals.entrySet()) {</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		for (Map.Entry&lt;String, Object&gt; actual : actuals.entrySet()) {</span>
 <span class="nc" id="L68">			Object reference = references.get(actual.getKey());</span>
 <span class="nc bnc" id="L69" title="All 2 branches missed.">			if (reference == null) {</span>
 <span class="nc" id="L70">				report.put(&quot;===&gt;\t&quot; + actual.getKey(), &quot;not found, consider ignore&quot;);</span>
@@ -78,7 +78,7 @@ public class PropertyMatcher extends TypeSafeMatcher&lt;Object&gt; {
 				}
 			}
 <span class="nc" id="L80">		}</span>
-<span class="nc" id="L81">		return ok;</span>
+<span class="fc" id="L81">		return ok;</span>
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class PropertyMatcher extends TypeSafeMatcher&lt;Object&gt; {
 	 * @return Matcher for assertions
 	 */
 	public static PropertyMatcher hasPropertiesOf(final Object reference) {
-<span class="nc" id="L91">		return new PropertyMatcher(reference);</span>
+<span class="fc" id="L91">		return new PropertyMatcher(reference);</span>
 	}
 
 	/**
@@ -99,22 +99,22 @@ public class PropertyMatcher extends TypeSafeMatcher&lt;Object&gt; {
 	 * @return Matcher for assertions
 	 */
 	public static PropertyMatcher hasPropertiesOf(final Object reference, String... ignores) {
-<span class="nc" id="L102">		return new PropertyMatcher(reference).ignores(ignores);</span>
+<span class="fc" id="L102">		return new PropertyMatcher(reference).ignores(ignores);</span>
 	}
 
 
 	public void setIgnores(String... ignores) {
-<span class="nc" id="L107">		this.ignoreList = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L108">		this.ignoreList.add(&quot;class&quot;);</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">		if (ignores != null) {</span>
-<span class="nc" id="L110">			this.ignoreList.addAll(asList(ignores));</span>
+<span class="fc" id="L107">		this.ignoreList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L108">		this.ignoreList.add(&quot;class&quot;);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">		if (ignores != null) {</span>
+<span class="fc" id="L110">			this.ignoreList.addAll(asList(ignores));</span>
 		}
-<span class="nc" id="L112">		this.ignores = this.ignoreList.toArray(new String[this.ignoreList.size()]);</span>
-<span class="nc" id="L113">	}</span>
+<span class="fc" id="L112">		this.ignores = this.ignoreList.toArray(new String[this.ignoreList.size()]);</span>
+<span class="fc" id="L113">	}</span>
 
 	public PropertyMatcher ignores(String... ignores) {
-<span class="nc" id="L116">		setIgnores(ignores);</span>
-<span class="nc" id="L117">		return this;</span>
+<span class="fc" id="L116">		setIgnores(ignores);</span>
+<span class="fc" id="L117">		return this;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.0.201801022044</span></div></body></html>

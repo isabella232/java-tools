@@ -13,7 +13,7 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">package</strong> com.namics.oss.java.tools.utils.test;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.hamcrest.Matchers;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.junit.Test;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.Test;
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> com.namics.oss.java.tools.utils.test.TimeoutHelper.sleep;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.hamcrest.MatcherAssert.assertThat;
@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_javadoccomment"> * @author aschaefer, Namics AG</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <em class="jxr_javadoccomment"> * @since 30.01.18 08:51</em>
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../com/namics/oss/java/tools/utils/test/TimeoutHelperTest.html">TimeoutHelperTest</a> {
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">class</strong> <a href="../../../../../../../com/namics/oss/java/tools/utils/test/TimeoutHelperTest.html">TimeoutHelperTest</a> {
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	@Test
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> timeout() {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">void</strong> timeout() {
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  		<strong class="jxr_keyword">long</strong> before = System.currentTimeMillis();
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  		sleep(10);
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  		<strong class="jxr_keyword">long</strong> after = System.currentTimeMillis();

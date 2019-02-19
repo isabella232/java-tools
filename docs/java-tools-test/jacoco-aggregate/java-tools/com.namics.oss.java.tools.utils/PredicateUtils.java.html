@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 	 * @return negated predicate
 	 */
 	public static &lt;T&gt; Predicate&lt;T&gt; not(Predicate&lt;T&gt; t) {
-<span class="nc" id="L27">		return t.negate();</span>
+<span class="fc" id="L27">		return t.negate();</span>
 	}
 
 	/**
@@ -36,7 +36,7 @@ import java.util.function.Supplier;
 	 */
 	@Deprecated
 	public static &lt;T&gt; Predicate&lt;T&gt; notNull() {
-<span class="nc bnc" id="L39" title="All 2 branches missed.">		return x -&gt; x != null;</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">		return x -&gt; x != null;</span>
 	}
 
 	/**
@@ -48,7 +48,7 @@ import java.util.function.Supplier;
 	 * @return predicate instance of lambda
 	 */
 	public static &lt;T&gt; Predicate&lt;T&gt; as(Predicate&lt;T&gt; predicate) {
-<span class="nc" id="L51">		return predicate;</span>
+<span class="fc" id="L51">		return predicate;</span>
 	}
 
 	/**
