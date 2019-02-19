@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -37,7 +38,10 @@ class ExcelUtilsTest {
 
 	@Test
 	void testWriteRead() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/util-test.xlsx";
+		File file = File.createTempFile("ExcelUtilsTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
+
 		LOG.info("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			ExcelUtils.write(Arrays.asList(testBeans), out, "pleaseIgnore");

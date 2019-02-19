@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +42,9 @@ class ExcelMapWriterTest {
 	@Test
 	void testWrite() throws Exception {
 		final List<Map<String, Object>> testMaps = getTestMaps();
-		String absolute = getClass().getResource("/").getFile() + "excel/mapwriter-test.xlsx";
+		File file = File.createTempFile("ExcelMapWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
 		OutputStream out = new FileOutputStream(absolute);
 		new ExcelMapWriter().write(testMaps, out);
 		checkIfFileContainsMaps(absolute, testMaps);

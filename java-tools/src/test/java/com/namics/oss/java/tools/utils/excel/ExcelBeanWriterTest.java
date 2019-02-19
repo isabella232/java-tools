@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,7 +47,9 @@ class ExcelBeanWriterTest {
 
 	@Test
 	void testWrite() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-test.xlsx";
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
 		LOG.info("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			new ExcelBeanWriter().write(Arrays.asList(testBeans), out);
@@ -57,7 +60,9 @@ class ExcelBeanWriterTest {
 
 	@Test
 	void testWriteLargeAmount() throws Exception {
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-bulk-test.xlsx";
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
 		LOG.debug("{}", absolute);
 		TestBean[] bulk = new TestBean[1000];
 		for (int i = 0; i < 1000; i++) {
@@ -81,7 +86,9 @@ class ExcelBeanWriterTest {
 		mapping.put("username", "firstname");
 		mapping.put("firstname", "username");
 		mapping.put("lastname", "lastname");
-		String absolute = getClass().getResource("/").getFile() + "excel/writer-test.xlsx";
+		File file = File.createTempFile("ExcelBeanWriterTest", ".xlsx");
+		file.deleteOnExit();
+		String absolute = file.getAbsolutePath();
 		LOG.debug("{}", absolute);
 		try (OutputStream out = new FileOutputStream(absolute)) {
 			new ExcelBeanWriter().write(Arrays.asList(testBeans), out, mapping);
